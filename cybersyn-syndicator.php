@@ -31,7 +31,7 @@ function checkAll(form) {
 </script>
 <div class="wrap">
 <?php
-if ( isset ( $_POST ["syndicate_feed"] ) ) {
+if ( !isset ( $_POST ["new_feed"] ) ) {
 echo "<h2>CyberSyn v.$csyn_version_id</h2>\n";
 ?>
 <div style="float:left;background-color:#FFFFA0;padding: 10px 10px 10px 10px;margin-right:15px;border: 1px solid #ddd;">
