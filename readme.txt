@@ -3,7 +3,7 @@ Contributors: CyberSEO
 Plugin URI: http://www.cyberseo.net/cybersyn/
 Author: CyberSEO
 Author URI: http://www.cyberseo.net/
-Tags: tags, tag cloud
+Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging
 Requires at least: 2.0.0
 Tested up to: 3.2.1
 Stable tag: 4.3
