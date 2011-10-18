@@ -31,10 +31,10 @@ function checkAll(form) {
 </script>
 <div class="wrap">
 <?php
-if ( !isset ( $_POST ["new_feed"] ) && !isset ( $_GET ["edit-feed-id"] ) ) {
+if ( !isset ( $_POST ["new_feed"] ) && !isset ( $_GET ["edit-feed-id"] ) && !isset ( $_POST ["check_for_updates"] ) ) {
 echo "<h2>CyberSyn v.$csyn_version_id</h2>\n";
 ?>
-<div style="float:left;background-color:#FFFFA0;padding: 10px 10px 10px 10px;margin-right:15px;border: 1px solid #ddd;">
+<div style="float:left;background-color:#FFFFCC;padding: 10px 10px 10px 10px;margin-right:15px;border: 1px solid #ddd;">
 <a href="http://www.cyberseo.net/" target="_blank"><img class="alignright" src="<?php echo WP_PLUGIN_URL; ?>/cybersyn/images/cyberseo.gif" alt="" width="80" height="80" /></a>
 <h3>Looking for a professional autoblogging plugin? Upgrade to CyberSEO with 10% discount!</h3>
 The <a href="http://www.cyberseo.net/" target="_blank"><strong>CyberSEO plugin</strong></a> is the most powerful XML/RSS feed syndicator and synonymizer, which works in a similar way as CyberSyn, but has the following additional features:<br />
@@ -46,7 +46,7 @@ The <a href="http://www.cyberseo.net/" target="_blank"><strong>CyberSEO plugin</
 - The CyberSEO allows one to run a full-featured automatically updating TUBE site.<br />
 - The CyberSEO has an unique feature which allows the PHP coders to write their own scripts for per-processing of syndicating feeds. With this feature the blog owner gains almost absolute power on syndicating content!<br />
 - The CyberSEO XML/RSS Feed Syndicator includes a smart pinging algorithm which won't send out 100's of pings if you are pulling many feeds at once.<br /><br />
-<strong><a href="http://www.cyberseo.net/" target="_blank">Upgrade to CyberSEO now</a> using the following coupon code to get 10% discount: "CSYNUSER"</strong>
+<strong><a href="http://www.cyberseo.net/" target="_blank">Upgrade to CyberSEO now</a> and use the following coupon code to get 10% discount: "CSYNUSER"</strong>
 <br /><br />
 </div>
 <?php
