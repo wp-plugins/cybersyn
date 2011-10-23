@@ -21,8 +21,6 @@ Features:
 1. Adjustable post uniqueness identification by GUID, post name or both.
 1. CyberSyn has no problem with syndicating various embedded media content such as tube videos etc.
 
-More usage info can be found at the [plugin's homepage](http://www.cyberseo.net/cybersyn/ "CyberSyn").
-
 == Installation ==
 
 1. Upload 'wp-flash.php' to the '/wp-content/plugins/' directory

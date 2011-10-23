@@ -8,6 +8,10 @@ Plugin URI: http://www.cyberseo.net/cybersyn/
 Description: CyberSyn is simple and lightweight but very powerful Atom/RSS syndicating plugin for WordPress.
 */
 
+if (! function_exists ( "get_option" ) || ! function_exists ( "add_filter" )) {
+	die ();
+}
+
 $csyn_version_id = "1.2";
 
 define ( 'CSYN_AUTOUPDATE_INTERVAL', 300 );
@@ -18,9 +22,6 @@ define ( 'CSYN_RSS_PULL_MODE', 'cxxx_rss_pull_mode' );
 define ( 'CSYN_CRON_MAGIC', 'cxxx_cron_magic' );
 define ( 'CSYN_FEED_OPTIONS', 'cxxx_feed_options' );
 
-if (! function_exists ( "get_option" ) || ! function_exists ( "add_filter" )) {
-	die ();
-}
 if (! @is_admin () && (time () - ( int ) get_option ( CSYN_LAST_AUTOUPDATE )) > CSYN_AUTOUPDATE_INTERVAL) {
 	csyn_set_option ( CSYN_LAST_AUTOUPDATE, time (), '', 'yes' );
 	$csyn_update_feeds_now = true;
