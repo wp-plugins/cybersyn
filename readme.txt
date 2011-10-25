@@ -23,7 +23,7 @@ Features:
 
 == Installation ==
 
-1. Upload 'wp-flash.php' to the '/wp-content/plugins/' directory
+1. Upload 'cybersyn' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Frequently Asked Questions ==
