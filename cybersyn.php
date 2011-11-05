@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: CyberSyn
-Version: 1.2
+Version: 1.3
 Author: CyberSEO.net
 Author URI: http://www.cyberseo.net/
 Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -12,7 +12,7 @@ if (! function_exists ( "get_option" ) || ! function_exists ( "add_filter" )) {
 	die ();
 }
 
-$csyn_version_id = "1.2";
+$csyn_version_id = "1.3";
 
 define ( 'CSYN_AUTOUPDATE_INTERVAL', 300 );
 define ( 'CSYN_LAST_AUTOUPDATE', 'cxxx_last_autoupdate' );
@@ -136,7 +136,7 @@ class CyberSyn_Syndicator {
 	
 	function fixURL($url) {
 		$url = trim ( $url );
-		if (strlen ( $url ) > 0 && strpos ( strtolower ( $url ), "http://" ) !== 0) {
+		if (strlen ( $url ) > 0 && stripos ( $url, "http://" ) !== 0) {
 			$url = "http://" . $url;
 		}
 		return $url;
@@ -702,7 +702,7 @@ class CyberSyn_Syndicator {
 			<td><select style="width: 160px;"
 				name="<?php
 			echo CSYN_RSS_PULL_MODE;
-			?>"
+			?>">
 				<?php
 			echo '<option ' . ((get_option ( CSYN_RSS_PULL_MODE ) == "auto") ? 'selected ' : '') . 'value="auto">auto</option>' . "\n";
 			echo '<option ' . ((get_option ( CSYN_RSS_PULL_MODE ) == "cron") ? 'selected ' : '') . 'value="cron">by cron job or manually</option>' . "\n";
