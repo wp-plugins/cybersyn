@@ -40,6 +40,8 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 = 1.3 =
 * "RSS Pull Mode" option switching issue has been fixed.
+
+= 1.2 =
 * First public GPL release.
 
 == Upgrade Notice ==
