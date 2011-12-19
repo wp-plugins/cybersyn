@@ -35,7 +35,7 @@ if ( !isset ( $_POST ["new_feed"] ) && !isset ( $_GET ["edit-feed-id"] ) && !iss
 echo "<h2>CyberSyn v.$csyn_version_id</h2>\n";
 ?>
 <div style="float:left;background-color:#FFFFCC;padding: 10px 10px 10px 10px;margin-right:15px;border: 1px solid #ddd;">
-<a href="http://www.cyberseo.net/" target="_blank"><img class="alignright" src="<?php echo WP_PLUGIN_URL; ?>/cybersyn/images/cyberseo.gif" alt="" width="80" height="80" /></a>
+<a href="http://www.cyberseo.net/" target="_blank"><img class="alignright" src="<?php echo WP_PLUGIN_URL; ?>/cybersyn/images/cyberseo.png" alt="" width="251" height="125" /></a>
 <h3>Looking for a professional autoblogging plugin? Upgrade to CyberSEO with 10% discount!</h3>
 The <a href="http://www.cyberseo.net/" target="_blank"><strong>CyberSEO plugin</strong></a> is the most powerful XML/RSS feed syndicator and synonymizer, which works in a similar way as CyberSyn, but has the following additional features:<br />
 - The CyberSEO plugin is able to parse all known RSS and XML feeds such as regular blog-style RSS, Ebay feeds, XML Shop feeds, YouTube feeds, Yahoo Answers feeds, Yahoo News feeds, Google BlogSerach feeds, XML tube feeds (SmartScripts Tube and TubeAce formats), Flickr and many-many more.<br />
@@ -82,7 +82,7 @@ if (isset ( $_GET ["edit-feed-id"] )) {
 	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['ping_status'] = $_POST ['post_pings'];
 	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['base_date'] = $_POST ['post_publish_date'];
 	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['max_items'] = abs ( ( int ) $_POST ['max_items'] );
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['post_category'] = $_POST ['post_category'];
+	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['post_category'] = @$_POST ['post_category'];
 	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['duplicate_check_method'] = $_POST ['duplicate_check_method'];
 	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['undefined_category'] = $_POST ['undefined_category'];
 	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['date_min'] = $date_min;
@@ -124,7 +124,7 @@ if (isset ( $_GET ["edit-feed-id"] )) {
 	} else {
 		$update_interval = max ( $min_update_time, abs ( ( int ) $_POST ['update_interval'] ) );
 	}
-	$csyn_syndicator->addFeed ( trim ( stripslashes ( htmlspecialchars ( $_POST ['feed_title'], ENT_NOQUOTES ) ) ), $_POST ['feed_url'], $update_interval, $_POST ['post_category'], $_POST ['post_status'], $_POST ['post_comments'], $_POST ['post_pings'], $_POST ['post_publish_date'], $_POST ['duplicate_check_method'], $_POST ['undefined_category'], $date_min, $date_max, abs ( ( int ) $_POST ['max_items'] ), @$_POST ['create_tags'] );
+	$csyn_syndicator->addFeed ( trim ( stripslashes ( htmlspecialchars ( $_POST ['feed_title'], ENT_NOQUOTES ) ) ), $_POST ['feed_url'], $update_interval, @$_POST ['post_category'], $_POST ['post_status'], $_POST ['post_comments'], $_POST ['post_pings'], $_POST ['post_publish_date'], $_POST ['duplicate_check_method'], $_POST ['undefined_category'], $date_min, $date_max, abs ( ( int ) $_POST ['max_items'] ), @$_POST ['create_tags'] );
 	$csyn_syndicator->showMainPage ();
 } elseif (isset ( $_POST ["update_default_settings"] )) {
 	csyn_set_option ( CSYN_RSS_PULL_MODE, $_POST [CSYN_RSS_PULL_MODE], '', 'yes' );
@@ -139,7 +139,7 @@ if (isset ( $_GET ["edit-feed-id"] )) {
 	$csyn_syndicator->global_options ['ping_status'] = $_POST ['post_pings'];
 	$csyn_syndicator->global_options ['base_date'] = $_POST ['post_publish_date'];
 	$csyn_syndicator->global_options ['max_items'] = abs ( ( int ) $_POST ['max_items'] );
-	$csyn_syndicator->global_options ['post_category'] = $_POST ['post_category'];
+	$csyn_syndicator->global_options ['post_category'] = @$_POST ['post_category'];
 	$csyn_syndicator->global_options ['duplicate_check_method'] = $_POST ['duplicate_check_method'];
 	$csyn_syndicator->global_options ['undefined_category'] = $_POST ['undefined_category'];
 	$csyn_syndicator->global_options ['date_min'] = $date_min;

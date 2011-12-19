@@ -16,7 +16,7 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 
 Features:
 
-1. CyberSyn doesn't use big and slow 3rd-party GPL libraries. Thus it parses the RSS feeds for those XML tags only that can be imported into WordPress posts and ignores everything else. So it has rather compact and extremely fast code!
+1. The CyberSyn plugin parses the RSS feeds for those XML tags only that can be imported into WordPress posts and ignores everything else. So it has rather compact and extremely fast code!
 1. Advanced RSS parsing algorithm has an ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated from the feed at once. This is a very useful feature for SE optimization of your blogs, because search engines don't like blogs that add 100 or more posts at once.
 1. Adjustable post uniqueness identification by GUID, post name or both.
 1. CyberSyn has no problem with syndicating various embedded media content such as tube videos etc.
@@ -37,6 +37,10 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 1.4 =
+* The feed import function has been improved. Now the status of 'safe_mode' and 'allow_url_fopen' PHP variables is not important in case if the PHP cURL extension is installed.
+* The user interface has been slightly improved.
 
 = 1.3 =
 * "RSS Pull Mode" option switching issue has been fixed.
