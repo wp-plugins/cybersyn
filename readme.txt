@@ -21,6 +21,15 @@ Features:
 3. Adjustable post uniqueness identification by GUID, post name or both.
 4. CyberSyn has no problem with syndicating various embedded media content such as tube videos etc.
 
+Requirements:
+
+1. PHP 5.2.4 or greater
+2. MySQL 5.0 or greater
+3. PHP cURL extension (recommended)
+4. PHP variable safe_mode must be disabled (if cURL is not installed)
+5. PHP variable allow_url_fopen must be enabled (if cURL is not installed)
+6. Access to cron on server (recommended)
+
 == Installation ==
 
 1. Upload 'cybersyn' to the '/wp-content/plugins/' directory
