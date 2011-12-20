@@ -1,18 +1,16 @@
 <?php
 /*
  Plugin Name: CyberSyn
- Version: 1.4
+ Version: 1.41
  Author: CyberSEO.net
  Author URI: http://www.cyberseo.net/
  Plugin URI: http://www.cyberseo.net/cybersyn/
- Description: CyberSyn is simple and lightweight but very powerful Atom/RSS syndicating plugin for WordPress.
+ Description: CyberSyn is powerful, simple and lightweight Atom/RSS syndicating plugin for WordPress.
  */
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
 	die();
 }
-
-$csyn_version_id = "1.4";
 
 define('CSYN_AUTOUPDATE_INTERVAL', 300);
 define('CSYN_LAST_AUTOUPDATE', 'cxxx_last_autoupdate');
@@ -362,11 +360,11 @@ class CyberSyn_Syndicator {
 		$this->tag = $name;
 
 		if ($this->insideitem && $name == "MEDIA:CONTENT") {
-			array_push($this->post ['media_content'], $attribs["URL"]);
+			$this->post ['media_content'][] = $attribs["URL"];
 		}
 
 		if ($this->insideitem && $name == "MEDIA:THUMBNAIL") {
-			array_push($this->post ['media_thumbnail'], $attribs["URL"]);
+			$this->post ['media_thumbnail'][] = $attribs["URL"];
 		}
 
 		if ($name == "ITEM" || $name == "ENTRY") {
@@ -392,7 +390,7 @@ class CyberSyn_Syndicator {
 		} elseif ($name == "CATEGORY") {
 			$category = trim($this->fixWhiteSpaces ($this->current_category ));
 			if (strlen($category) > 0) {
-				array_push($this->post ['categories'], $category);
+				$this->post ['categories'][] = $category;
 			}
 			$this->current_category = "";
 		} elseif ($this->count >= $this->max) {
@@ -499,7 +497,7 @@ class CyberSyn_Syndicator {
 				$feeds_cnt = count($this->feeds );
 				for ($i = 0; $i < $feeds_cnt; $i++) {
 					if (!in_array($i, $feed_ids)) {
-						array_push($feeds, $this->feeds [$i]);
+						$feeds[] = $this->feeds [$i];
 					}
 				}
 				$this->feeds = $feeds;
@@ -507,16 +505,6 @@ class CyberSyn_Syndicator {
 			}
 			csyn_set_option(CSYN_SYNDICATED_FEEDS, $this->feeds, '', 'yes');
 		}
-	}
-
-	function wpdb_update($table, $data, $where) {
-		global $wpdb;
-		$data = add_magic_quotes($data);
-		$bits = $wheres = array();
-		foreach (array_keys($data) as $k) $bits[] = "`$k` = '$data[$k]'";
-		if (is_array($where)) foreach ($where as $c => $v) $wheres[] = "$c = '" . $wpdb->escape ($v) . "'";
-		else return false;
-		return $wpdb->query ("UPDATE $table SET " . implode(', ', $bits) . ' WHERE ' . implode(' AND ', $wheres));
 	}
 
 	function insertPost() {
@@ -586,7 +574,7 @@ class CyberSyn_Syndicator {
 			if (!empty($cat_ids)) {
 				$post_categories = array_merge($post_categories, $cat_ids);
 			} elseif ($this->current_feed ['options']['undefined_category'] == 'use_default' && empty($post_categories)) {
-				array_push($post_categories, get_option('default_category'));
+				$post_categories[] = get_option('default_category');
 			}
 			$post_categories = array_unique($post_categories);
 			$post['post_category'] = $post_categories;
@@ -616,10 +604,10 @@ class CyberSyn_Syndicator {
 			if (function_exists('term_exists')) {
 				$cat_id = term_exists($cat_name, 'category');
 				if ($cat_id) {
-					array_push($cat_ids, $cat_id['term_id']);
+					$cat_ids[] = $cat_id['term_id'];
 				} elseif ($this->current_feed ['options']['undefined_category'] == 'create_new') {
 					$term = wp_insert_term($cat_name, 'category');
-					array_push($cat_ids, $term['term_id']);
+					$cat_ids[] = $term['term_id'];
 				}
 			} else {
 				$cat_name_escaped = $wpdb->escape ($cat_name);
@@ -627,7 +615,7 @@ class CyberSyn_Syndicator {
 
 				if ($results) {
 					foreach ($results as $term) {
-						array_push($cat_ids, (int) $term->cat_ID );
+						$cat_ids[] = (int) $term->cat_ID ;
 					}
 				} elseif ($this->current_feed ['options']['undefined_category'] == 'create_new') {
 					if (function_exists('wp_insert_category')) {
@@ -637,7 +625,7 @@ class CyberSyn_Syndicator {
 						$wpdb->query ("INSERT INTO $wpdb->categories SET cat_name='$cat_name_escaped', category_nicename='$cat_name_sanitized'" );
 						$cat_id = $wpdb->insert_id;
 					}
-					array_push($cat_ids, $cat_id);
+					$cat_ids[] = $cat_id;
 				}
 			}
 		}
@@ -944,7 +932,7 @@ class CyberSyn_Syndicator {
 		echo "</table>\n";
 		echo "</form>";
 		if (count($this->feeds ) > 0) {
-			echo '<form id="syndycated_feeds" action="' . $_SERVER ['REQUEST_URI'] . '" method="post">' . "\n";
+			echo '<form id="syndycated_feeds" action="' . $_SERVER['REQUEST_URI'] . '" method="post">' . "\n";
 			echo '<table class="widefat" style="margin-top: .5em" width="100%">' . "\n";
 			echo '<thead>' . "\n";
 			echo '<tr>' . "\n";

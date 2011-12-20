@@ -1,7 +1,11 @@
 <?php
 /*
-Copyright (c) 2005-2011 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
-*/
+ Copyright (c) 2005-2011 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
+ */
+
+if (!function_exists("get_option") || !function_exists("add_filter")) {
+	die();
+}
 ?>
 <style type="text/css">
 div.cybersyn-ui-tabs-panel {
@@ -31,8 +35,8 @@ function checkAll(form) {
 </script>
 <div class="wrap">
 <?php
-if ( !isset ( $_POST ["new_feed"] ) && !isset ( $_GET ["edit-feed-id"] ) && !isset ( $_POST ["check_for_updates"] ) ) {
-echo "<h2>CyberSyn v.$csyn_version_id</h2>\n";
+if (!isset($_POST["new_feed"]) && !isset($_GET["edit-feed-id"]) && !isset($_POST["check_for_updates"])) {
+	echo "<h2>CyberSyn</h2>\n";
 ?>
 <div style="float:left;background-color:#FFFFCC;padding: 10px 10px 10px 10px;margin-right:15px;border: 1px solid #ddd;">
 <a href="http://www.cyberseo.net/" target="_blank"><img class="alignright" src="<?php echo WP_PLUGIN_URL; ?>/cybersyn/images/cyberseo.png" alt="" width="251" height="125" /></a>
@@ -51,101 +55,101 @@ The <a href="http://www.cyberseo.net/" target="_blank"><strong>CyberSEO plugin</
 </div>
 <?php
 }
-if (defined ( "CSYN_MIN_UPDATE_TIME" )) {
+if (defined("CSYN_MIN_UPDATE_TIME")) {
 	$min_update_time = CSYN_MIN_UPDATE_TIME;
 } else {
 	$min_update_time = 0;
 }
-if (isset ( $_GET ["edit-feed-id"] )) {
-	if ($csyn_syndicator->feedPreview ( $csyn_syndicator->fixURL ( $csyn_syndicator->feeds [( int ) $_GET ["edit-feed-id"]] ['url'] ), true )) {
-		$csyn_syndicator->showSettings ( true, $csyn_syndicator->feeds [( int ) $_GET ["edit-feed-id"]] ['options'] );
+if (isset($_GET["edit-feed-id"])) {
+	if ($csyn_syndicator->feedPreview ($csyn_syndicator->fixURL ($csyn_syndicator->feeds [(int) $_GET["edit-feed-id"]]['url']), true)) {
+		$csyn_syndicator->showSettings (true, $csyn_syndicator->feeds [(int) $_GET["edit-feed-id"]]['options']);
 	} else {
 		$csyn_syndicator->showMainPage ();
 	}
-} elseif (isset ( $_POST ["update_feed_settings"] )) {
-	$date_min = ( int ) $_POST ['date_min'];
-	$date_max = ( int ) $_POST ['date_max'];
+} elseif (isset($_POST["update_feed_settings"])) {
+	$date_min = (int) $_POST['date_min'];
+	$date_max = (int) $_POST['date_max'];
 	if ($date_min > $date_max) {
 		$date_min = $date_max;
 	}
-	if (strlen ( trim ( stripslashes ( htmlspecialchars ( $_POST ['feed_title'], ENT_NOQUOTES ) ) ) ) == 0) {
-		$_POST ['feed_title'] = "no name";
+	if (strlen(trim(stripslashes(htmlspecialchars($_POST['feed_title'], ENT_NOQUOTES)))) == 0) {
+		$_POST['feed_title'] = "no name";
 	}
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['title'] = trim ( stripslashes ( htmlspecialchars ( $_POST ['feed_title'], ENT_NOQUOTES ) ) );
-	if (abs ( ( int ) $_POST ['update_interval'] ) == 0) {
-		$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['interval'] = 0;
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['title'] = trim(stripslashes(htmlspecialchars($_POST['feed_title'], ENT_NOQUOTES)));
+	if ((int) $_POST['update_interval'] == 0) {
+		$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['interval'] = 0;
 	} else {
-		$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['interval'] = max ( $min_update_time, abs ( ( int ) $_POST ['update_interval'] ) );
+		$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['interval'] = max($min_update_time, abs((int) $_POST['update_interval']));
 	}
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['post_status'] = $_POST ['post_status'];
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['comment_status'] = $_POST ['post_comments'];
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['ping_status'] = $_POST ['post_pings'];
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['base_date'] = $_POST ['post_publish_date'];
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['max_items'] = abs ( ( int ) $_POST ['max_items'] );
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['post_category'] = @$_POST ['post_category'];
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['duplicate_check_method'] = $_POST ['duplicate_check_method'];
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['undefined_category'] = $_POST ['undefined_category'];
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['date_min'] = $date_min;
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['date_max'] = $date_max;
-	$csyn_syndicator->feeds [( int ) $_POST ["feed_id"]] ['options'] ['create_tags'] = @$_POST ['create_tags'];
-	csyn_set_option ( CSYN_SYNDICATED_FEEDS, $csyn_syndicator->feeds, '', 'yes' );
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['post_status'] = $_POST['post_status'];
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['comment_status'] = $_POST['post_comments'];
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['ping_status'] = $_POST['post_pings'];
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['base_date'] = $_POST['post_publish_date'];
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['max_items'] = abs((int) $_POST['max_items']);
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['post_category'] = @$_POST['post_category'];
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['duplicate_check_method'] = $_POST['duplicate_check_method'];
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['undefined_category'] = $_POST['undefined_category'];
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['date_min'] = $date_min;
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['date_max'] = $date_max;
+	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['create_tags'] = @$_POST['create_tags'];
+	csyn_set_option(CSYN_SYNDICATED_FEEDS, $csyn_syndicator->feeds, '', 'yes');
 	$csyn_syndicator->showMainPage ();
-} elseif (isset ( $_POST ["check_for_updates"] )) {
-	$csyn_syndicator->syndicateFeeds ( $_POST ["feed_ids"], false, true );
+} elseif (isset($_POST["check_for_updates"])) {
+	$csyn_syndicator->syndicateFeeds ($_POST["feed_ids"], false, true);
 	$csyn_syndicator->showMainPage ();
-} elseif (isset ( $_POST ["delete_feeds"] )) {
-	$csyn_syndicator->deleteFeeds ( $_POST ["feed_ids"], false, true );
+} elseif (isset($_POST["delete_feeds"])) {
+	$csyn_syndicator->deleteFeeds ($_POST["feed_ids"], false, true);
 	$csyn_syndicator->showMainPage ();
-} elseif (isset ( $_POST ["delete_posts"] )) {
-	$csyn_syndicator->deleteFeeds ( $_POST ["feed_ids"], true, false );
+} elseif (isset($_POST["delete_posts"])) {
+	$csyn_syndicator->deleteFeeds ($_POST["feed_ids"], true, false);
 	$csyn_syndicator->showMainPage ();
-} elseif (isset ( $_POST ["delete_feeds_and_posts"] )) {
-	$csyn_syndicator->deleteFeeds ( $_POST ["feed_ids"], true, true );
+} elseif (isset($_POST["delete_feeds_and_posts"])) {
+	$csyn_syndicator->deleteFeeds ($_POST["feed_ids"], true, true);
 	$csyn_syndicator->showMainPage ();
-} elseif (isset ( $_POST ["new_feed"] ) && strlen ( $_POST ["feed_url"] ) > 0) {
-	if ($csyn_syndicator->feedPreview ( $csyn_syndicator->fixURL ( $_POST ["feed_url"] ), false )) {
+} elseif (isset($_POST["new_feed"]) && strlen($_POST["feed_url"]) > 0) {
+	if ($csyn_syndicator->feedPreview ($csyn_syndicator->fixURL ($_POST["feed_url"]), false)) {
 		$options = $csyn_syndicator->global_options;
-		$options ['undefined_category'] = 'use_global';
-		$csyn_syndicator->showSettings ( true, $options );
+		$options['undefined_category'] = 'use_global';
+		$csyn_syndicator->showSettings (true, $options);
 	} else {
 		$csyn_syndicator->showMainPage ();
 	}
-} elseif (isset ( $_POST ["syndicate_feed"] )) {
-	$date_min = ( int ) $_POST ['date_min'];
-	$date_max = ( int ) $_POST ['date_max'];
+} elseif (isset($_POST["syndicate_feed"])) {
+	$date_min = (int) $_POST['date_min'];
+	$date_max = (int) $_POST['date_max'];
 	if ($date_min > $date_max) {
 		$date_min = $date_max;
 	}
-	if (strlen ( trim ( stripslashes ( htmlspecialchars ( $_POST ['feed_title'], ENT_NOQUOTES ) ) ) ) == 0) {
-		$_POST ['feed_title'] = "no name";
+	if (strlen(trim(stripslashes(htmlspecialchars($_POST['feed_title'], ENT_NOQUOTES)))) == 0) {
+		$_POST['feed_title'] = "no name";
 	}
-	if (abs ( ( int ) $_POST ['update_interval'] ) == 0) {
+	if ((int) $_POST['update_interval'] == 0) {
 		$update_interval = 0;
 	} else {
-		$update_interval = max ( $min_update_time, abs ( ( int ) $_POST ['update_interval'] ) );
+		$update_interval = max($min_update_time, abs((int) $_POST['update_interval']));
 	}
-	$csyn_syndicator->addFeed ( trim ( stripslashes ( htmlspecialchars ( $_POST ['feed_title'], ENT_NOQUOTES ) ) ), $_POST ['feed_url'], $update_interval, @$_POST ['post_category'], $_POST ['post_status'], $_POST ['post_comments'], $_POST ['post_pings'], $_POST ['post_publish_date'], $_POST ['duplicate_check_method'], $_POST ['undefined_category'], $date_min, $date_max, abs ( ( int ) $_POST ['max_items'] ), @$_POST ['create_tags'] );
+	$csyn_syndicator->addFeed (trim(stripslashes(htmlspecialchars($_POST['feed_title'], ENT_NOQUOTES))), $_POST['feed_url'], $update_interval, @$_POST['post_category'], $_POST['post_status'], $_POST['post_comments'], $_POST['post_pings'], $_POST['post_publish_date'], $_POST['duplicate_check_method'], $_POST['undefined_category'], $date_min, $date_max, abs((int) $_POST['max_items']), @$_POST['create_tags']);
 	$csyn_syndicator->showMainPage ();
-} elseif (isset ( $_POST ["update_default_settings"] )) {
-	csyn_set_option ( CSYN_RSS_PULL_MODE, $_POST [CSYN_RSS_PULL_MODE], '', 'yes' );
-	$date_min = ( int ) $_POST ['date_min'];
-	$date_max = ( int ) $_POST ['date_max'];
+} elseif (isset($_POST["update_default_settings"])) {
+	csyn_set_option(CSYN_RSS_PULL_MODE, $_POST[CSYN_RSS_PULL_MODE], '', 'yes');
+	$date_min = (int) $_POST['date_min'];
+	$date_max = (int) $_POST['date_max'];
 	if ($date_min > $date_max) {
 		$date_min = $date_max;
 	}
-	$csyn_syndicator->global_options ['interval'] = abs ( ( int ) $_POST ['update_interval'] );
-	$csyn_syndicator->global_options ['post_status'] = $_POST ['post_status'];
-	$csyn_syndicator->global_options ['comment_status'] = $_POST ['post_comments'];
-	$csyn_syndicator->global_options ['ping_status'] = $_POST ['post_pings'];
-	$csyn_syndicator->global_options ['base_date'] = $_POST ['post_publish_date'];
-	$csyn_syndicator->global_options ['max_items'] = abs ( ( int ) $_POST ['max_items'] );
-	$csyn_syndicator->global_options ['post_category'] = @$_POST ['post_category'];
-	$csyn_syndicator->global_options ['duplicate_check_method'] = $_POST ['duplicate_check_method'];
-	$csyn_syndicator->global_options ['undefined_category'] = $_POST ['undefined_category'];
+	$csyn_syndicator->global_options ['interval'] = abs((int) $_POST['update_interval']);
+	$csyn_syndicator->global_options ['post_status'] = $_POST['post_status'];
+	$csyn_syndicator->global_options ['comment_status'] = $_POST['post_comments'];
+	$csyn_syndicator->global_options ['ping_status'] = $_POST['post_pings'];
+	$csyn_syndicator->global_options ['base_date'] = $_POST['post_publish_date'];
+	$csyn_syndicator->global_options ['max_items'] = abs((int) $_POST['max_items']);
+	$csyn_syndicator->global_options ['post_category'] = @$_POST['post_category'];
+	$csyn_syndicator->global_options ['duplicate_check_method'] = $_POST['duplicate_check_method'];
+	$csyn_syndicator->global_options ['undefined_category'] = $_POST['undefined_category'];
 	$csyn_syndicator->global_options ['date_min'] = $date_min;
 	$csyn_syndicator->global_options ['date_max'] = $date_max;
-	$csyn_syndicator->global_options ['create_tags'] = @$_POST ['create_tags'];
-	csyn_set_option ( CSYN_FEED_OPTIONS, $csyn_syndicator->global_options, '', 'yes' );
+	$csyn_syndicator->global_options ['create_tags'] = @$_POST['create_tags'];
+	csyn_set_option(CSYN_FEED_OPTIONS, $csyn_syndicator->global_options, '', 'yes');
 	$csyn_syndicator->showMainPage ();
 } else {
 	$csyn_syndicator->showMainPage ();
