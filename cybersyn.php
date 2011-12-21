@@ -1,11 +1,11 @@
 <?php
 /*
  Plugin Name: CyberSyn
- Version: 1.41
+ Version: 2.00
  Author: CyberSEO.net
  Author URI: http://www.cyberseo.net/
  Plugin URI: http://www.cyberseo.net/cybersyn/
- Description: CyberSyn is powerful, simple and lightweight Atom/RSS syndicating plugin for WordPress.
+ Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
@@ -27,22 +27,11 @@ if (!@is_admin() && (time() - (int) get_option(CSYN_LAST_AUTOUPDATE)) > CSYN_AUT
 	$csyn_update_feeds_now = false;
 }
 
-function csyn_get_url_scheme($url) {
-	$res = parse_url($url);
-	return $res['scheme'];
-}
-
-function csyn_get_url_path($url) {
-	$res = parse_url($url);
-	return $res['path'];
-}
-
-function csyn_get_url_query($url) {
-	$res = parse_url($url);
-	if (isset($res['query'])) {
-		return $res['query'];
+function csyn_set_option($option_name, $newvalue, $deprecated, $autoload) {
+	if (get_option($option_name) === false) {
+		add_option($option_name, $newvalue, $deprecated, $autoload);
 	} else {
-		return '';
+		update_option($option_name, $newvalue);
 	}
 }
 
@@ -318,7 +307,9 @@ class CyberSyn_Syndicator {
 		if (strlen(trim($this->post ['post_content'])) == 0) {
 			$this->post ['post_content'] = $this->post ['post_excerpt'];
 		}
+		echo '<div style="overflow:auto; max-height:250px; border:1px #ccc solid; background-color:white; padding:8px; margin:8px 0 8px; 0;">' . "\n";
 		echo $this->fixWhiteSpaces (trim($this->post ['post_content'])) . "\n";
+		echo '</div>' . "\n";
 
 		if (sizeof($this->post ['media_thumbnail']) == sizeof($this->post ['media_content'])) {
 			echo '<p class="media_block">' . "\n";
@@ -344,15 +335,29 @@ class CyberSyn_Syndicator {
 		}
 		$this->max = 1;
 		$this->preview = true;
-		echo "<fieldset>\n";
-		echo "<h3>Feed Info and Preview</h3>\n";
+?>
+<table class="widefat" width="100%">
+	<thead>
+		<tr valign="top">
+			<th>Feed Info and Preview</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr> 
+			<td>
+<?php
 		$this->resetPost ();
 		$this->count = 0;
 		$result = $this->parseFeed ($feed_url);
 		if (!$result) {
 			echo '<div id="message" class="error"><p><strong>No feed found at</strong> <a href="http://validator.w3.org/feed/check.cgi?url=' . urlencode($feed_url) . '" target="_blank">' . htmlspecialchars($feed_url) . '</a></p></div>' . "\n";
 		}
-		echo "</fieldset>\n";
+?>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<?php
 		return ($result != 0);
 	}
 
@@ -513,10 +518,15 @@ class CyberSyn_Syndicator {
 		if (empty($cat_ids) && $this->current_feed ['options']['undefined_category'] == 'drop') {
 			return;
 		}
+
 		$post = array();
 		if (strlen($this->post ['guid']) < 8) {
-			$components = parse_url($this->post ['link']);
-			$guid = 'tag:' . $components['host'];
+			if (strlen($this->post ['link'])) {
+				$components = parse_url($this->post ['link']);
+				$guid = 'tag:' . $components['host'];
+			} else {
+				$guid = 'tag:' . md5($this->post['post_content'] . $this->post['post_excerpt']);
+			}
 			if ($this->post ['post_date'] != "") {
 				$guid .= '://post.' . $this->post ['post_date'];
 			} else {
@@ -525,6 +535,7 @@ class CyberSyn_Syndicator {
 		} else {
 			$guid = $this->post ['guid'];
 		}
+
 		$post['post_title'] = $this->fixWhiteSpaces (trim($this->post ['post_title']));
 		$post['post_name'] = sanitize_title($post['post_title']);
 		$post['guid'] = $wpdb->escape ($guid);
@@ -921,7 +932,7 @@ class CyberSyn_Syndicator {
 		return $url;
 	}
 
-	function showMainPage() {
+	function showMainPage($showsettings = true) {
 		global $wp_version;
 		echo '<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">' . "\n";
 		echo '<table class="form-table" width="100%">';
@@ -984,20 +995,23 @@ class CyberSyn_Syndicator {
 			value="Delete posts syndycated from selected feeds" type="submit"></div>
 		</td>
 	</tr>
+		<tr>
+			<td></td>
+			<td><br />
+				<div align="right">
+					<input class="button secondary" name="alter_default_settings"
+						value="Alter default settings" type="submit">
+				</div>
+			</td>
+		</tr>	
 </table>
 </div>
 </form>
 <?php
 		}
-		$this->showSettings (false, $this->global_options );
-	}
-}
-
-function csyn_set_option($option_name, $newvalue, $deprecated, $autoload) {
-	if (get_option($option_name) === false) {
-		add_option($option_name, $newvalue, $deprecated, $autoload);
-	} else {
-		update_option($option_name, $newvalue);
+		if ($showsettings) {
+			$this->showSettings (false, $this->global_options );
+		}
 	}
 }
 

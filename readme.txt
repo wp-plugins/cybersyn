@@ -8,11 +8,11 @@ Requires at least: 2.0.0
 Tested up to: 3.3
 Stable tag: 4.3
 
-A simple and lightweight but very powerful Atom/RSS syndicating plugin for WordPress.
+A powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
 
 == Description ==
 
-The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "CyberSEO.net")) is powerful, simple and lightweight Atom/RSS syndicating plugin for WordPress.
+The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "CyberSEO.net")) is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
 
 Features:
 
@@ -47,8 +47,10 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
-= 1.41 =
-* Minor bug fix release.
+= 2.0 =
+* The CyberSyn plugin is now 100% compatible with WordPress 3.3.
+* The UI has been improved.
+* Default settings have been removed from the "XML Syndicator" page. Use the "Alter default settings" button instead.
 
 = 1.4 =
 * The feed import function has been improved. Now the status of 'safe_mode' and 'allow_url_fopen' PHP variables is not important in case if the PHP cURL extension is installed.

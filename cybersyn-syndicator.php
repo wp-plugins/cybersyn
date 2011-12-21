@@ -35,16 +35,15 @@ function checkAll(form) {
 </script>
 <div class="wrap">
 <?php
-if (!isset($_POST["new_feed"]) && !isset($_GET["edit-feed-id"]) && !isset($_POST["check_for_updates"])) {
+if (!isset($_POST["new_feed"]) && !isset($_GET["edit-feed-id"]) && !isset($_POST["check_for_updates"]) && !isset($_POST["alter_default_settings"])) {
 	echo "<h2>CyberSyn</h2>\n";
 ?>
 <div style="float:left;background-color:#FFFFCC;padding: 10px 10px 10px 10px;margin-right:15px;border: 1px solid #ddd;">
 <a href="http://www.cyberseo.net/" target="_blank"><img class="alignright" src="<?php echo WP_PLUGIN_URL; ?>/cybersyn/images/cyberseo.png" alt="" width="251" height="125" /></a>
 <h3>Looking for a professional autoblogging plugin? Upgrade to CyberSEO with 10% discount!</h3>
-The <a href="http://www.cyberseo.net/" target="_blank"><strong>CyberSEO plugin</strong></a> is the most powerful XML/RSS feed syndicator and synonymizer, which works in a similar way as CyberSyn, but has the following additional features:<br />
-- The CyberSEO plugin is able to parse all known RSS and XML feeds such as regular blog-style RSS, Ebay feeds, XML Shop feeds, YouTube feeds, Yahoo Answers feeds, Yahoo News feeds, Google BlogSerach feeds, XML tube feeds (SmartScripts Tube and TubeAce formats), Flickr and many-many more.<br />
+- The <a href="http://www.cyberseo.net/" target="_blank"><strong>CyberSEO plugin</strong></a> is the most powerful XML/RSS feed syndicator and synonymizer, which works in a similar way as CyberSyn, but has the following additional features:<br />
+- The CyberSEO plugin is able to parse all known RSS and XML feeds such as regular blog-style RSS, Ebay feeds, XML Shop feeds, YouTube feeds, Yahoo Answers feeds, Yahoo News feeds, XML tube feeds (SmartScripts Tube and TubeAce formats), Flickr and many more.<br />
 - The unique "Parse WordPress archives" function allows one to syndicate all the published posts from ANY other WordPress blog with a single click.<br />
-- The CyberSEO XML/RSS Feed Syndicator has no problem with syndicating the embedded media content such as tube videos etc.<br />
 - You can spin (<a title="Synonymizer and Rewriter" href="http://www.cyberseo.net/synonymizer-rewriter/" target="_blank">synonymize and rewrite</a>) every syndicated post, shuffle its paragraphs, add any random HTML blocks as headers and footers.<br />
 - You can hotlink images from the syndicated posts or store (cache) them on your server. This feature allows to bypass hotlink protection, hide the image source URL and improve performance of the blog.<br />
 - The CyberSEO allows one to run a full-featured automatically updating TUBE site.<br />
@@ -64,7 +63,7 @@ if (isset($_GET["edit-feed-id"])) {
 	if ($csyn_syndicator->feedPreview ($csyn_syndicator->fixURL ($csyn_syndicator->feeds [(int) $_GET["edit-feed-id"]]['url']), true)) {
 		$csyn_syndicator->showSettings (true, $csyn_syndicator->feeds [(int) $_GET["edit-feed-id"]]['options']);
 	} else {
-		$csyn_syndicator->showMainPage ();
+		$csyn_syndicator->showMainPage (false);
 	}
 } elseif (isset($_POST["update_feed_settings"])) {
 	$date_min = (int) $_POST['date_min'];
@@ -93,26 +92,26 @@ if (isset($_GET["edit-feed-id"])) {
 	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['date_max'] = $date_max;
 	$csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['create_tags'] = @$_POST['create_tags'];
 	csyn_set_option(CSYN_SYNDICATED_FEEDS, $csyn_syndicator->feeds, '', 'yes');
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
 } elseif (isset($_POST["check_for_updates"])) {
 	$csyn_syndicator->syndicateFeeds ($_POST["feed_ids"], false, true);
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
 } elseif (isset($_POST["delete_feeds"])) {
 	$csyn_syndicator->deleteFeeds ($_POST["feed_ids"], false, true);
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
 } elseif (isset($_POST["delete_posts"])) {
 	$csyn_syndicator->deleteFeeds ($_POST["feed_ids"], true, false);
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
 } elseif (isset($_POST["delete_feeds_and_posts"])) {
 	$csyn_syndicator->deleteFeeds ($_POST["feed_ids"], true, true);
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
 } elseif (isset($_POST["new_feed"]) && strlen($_POST["feed_url"]) > 0) {
 	if ($csyn_syndicator->feedPreview ($csyn_syndicator->fixURL ($_POST["feed_url"]), false)) {
 		$options = $csyn_syndicator->global_options;
 		$options['undefined_category'] = 'use_global';
 		$csyn_syndicator->showSettings (true, $options);
 	} else {
-		$csyn_syndicator->showMainPage ();
+		$csyn_syndicator->showMainPage (true);
 	}
 } elseif (isset($_POST["syndicate_feed"])) {
 	$date_min = (int) $_POST['date_min'];
@@ -129,7 +128,7 @@ if (isset($_GET["edit-feed-id"])) {
 		$update_interval = max($min_update_time, abs((int) $_POST['update_interval']));
 	}
 	$csyn_syndicator->addFeed (trim(stripslashes(htmlspecialchars($_POST['feed_title'], ENT_NOQUOTES))), $_POST['feed_url'], $update_interval, @$_POST['post_category'], $_POST['post_status'], $_POST['post_comments'], $_POST['post_pings'], $_POST['post_publish_date'], $_POST['duplicate_check_method'], $_POST['undefined_category'], $date_min, $date_max, abs((int) $_POST['max_items']), @$_POST['create_tags']);
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
 } elseif (isset($_POST["update_default_settings"])) {
 	csyn_set_option(CSYN_RSS_PULL_MODE, $_POST[CSYN_RSS_PULL_MODE], '', 'yes');
 	$date_min = (int) $_POST['date_min'];
@@ -150,9 +149,11 @@ if (isset($_GET["edit-feed-id"])) {
 	$csyn_syndicator->global_options ['date_max'] = $date_max;
 	$csyn_syndicator->global_options ['create_tags'] = @$_POST['create_tags'];
 	csyn_set_option(CSYN_FEED_OPTIONS, $csyn_syndicator->global_options, '', 'yes');
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
+} elseif (isset($_POST["alter_default_settings"])) {
+	$csyn_syndicator->showSettings (false, $csyn_syndicator->global_options );
 } else {
-	$csyn_syndicator->showMainPage ();
+	$csyn_syndicator->showMainPage (false);
 }
 ?>
 </div>
