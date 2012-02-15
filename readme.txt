@@ -5,7 +5,7 @@ Author: CyberSEO
 Author URI: http://www.cyberseo.net/
 Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging
 Requires at least: 2.0.0
-Tested up to: 3.3
+Tested up to: 3.3.1
 Stable tag: 4.3
 
 A powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
@@ -16,10 +16,10 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 
 Features:
 
-1. The CyberSyn plugin parses the RSS feeds for those XML tags only that can be imported into WordPress posts and ignores everything else. So it has rather compact and extremely fast code!
-2. Advanced RSS parsing algorithm has an ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated from the feed at once. This is a very useful feature for SE optimization of your blogs, because search engines don't like blogs that add 100 or more posts at once.
+1. The CyberSyn plugin parses the RSS feeds for those XML elements only that can be imported into WordPress posts and ignores everything else. So it has a rather compact and extremely fast code!
+2. Advanced RSS parsing algorithm has an ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated from the feed at once. This is a very useful feature for SEO of your blogs, because search engines don't like blogs that add 100 or more posts at once.
 3. Adjustable post uniqueness identification by GUID, post name or both.
-4. CyberSyn has no problem with syndicating various embedded media content such as tube videos etc.
+4. CyberSyn has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
 
 Requirements:
 
@@ -46,6 +46,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 2.1 =
+* All known bugs were fixed.
 
 = 2.0 =
 * The CyberSyn plugin is now 100% compatible with WordPress 3.3.

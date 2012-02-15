@@ -1,7 +1,7 @@
 <?php
 /*
  Plugin Name: CyberSyn
- Version: 2.00
+ Version: 2.01
  Author: CyberSEO.net
  Author URI: http://www.cyberseo.net/
  Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -13,6 +13,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
 }
 
 define('CSYN_AUTOUPDATE_INTERVAL', 300);
+define('CXXX_MAX_CURL_REDIRECTS', 10);
 define('CSYN_LAST_AUTOUPDATE', 'cxxx_last_autoupdate');
 define('CSYN_SYNDICATED_FEEDS', 'cxxx_syndicated_feeds');
 define('CSYN_DISABLE_ENCODING', 'cxxx_disable_encoding');
@@ -1034,12 +1035,7 @@ $csyn_syndicator = new CyberSyn_Syndicator();
 $csyn_disable_encoding = get_option(CSYN_DISABLE_ENCODING);
 $csyn_rss_pull_mode = get_option(CSYN_RSS_PULL_MODE);
 if (isset($_GET['pull-feeds']) && $_GET['pull-feeds'] == get_option(CSYN_CRON_MAGIC)) {
-	$feed_cnt = count($csyn_syndicator->feeds );
-	if ($feed_cnt > 0) {
-		$feed_ids = range(0, $feed_cnt - 1);
-		$csyn_syndicator->syndicateFeeds ($feed_ids, true, true);
-	}
-	die();
+	add_action('shutdown', 'csyn_auto_update_feeds');
 }
 if (is_admin()) {
 	csyn_preset_options();
