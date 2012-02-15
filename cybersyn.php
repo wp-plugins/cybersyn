@@ -13,7 +13,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
 }
 
 define('CSYN_AUTOUPDATE_INTERVAL', 300);
-define('CXXX_MAX_CURL_REDIRECTS', 10);
+define('CSYN_MAX_CURL_REDIRECTS', 10);
 define('CSYN_LAST_AUTOUPDATE', 'cxxx_last_autoupdate');
 define('CSYN_SYNDICATED_FEEDS', 'cxxx_syndicated_feeds');
 define('CSYN_DISABLE_ENCODING', 'cxxx_disable_encoding');
@@ -39,7 +39,7 @@ function csyn_set_option($option_name, $newvalue, $deprecated, $autoload) {
 function csyn_file_get_contents($url, $as_array = false) {
 	if (parse_url($url, PHP_URL_SCHEME) != "") {
 		if (function_exists('curl_init')) {
-			$max_redirects = CXXX_MAX_CURL_REDIRECTS;
+			$max_redirects = CSYN_MAX_CURL_REDIRECTS;
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_USERAGENT, 'cURL');
