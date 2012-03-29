@@ -1,7 +1,7 @@
 <?php
 /*
  Plugin Name: CyberSyn
- Version: 2.01
+ Version: 2.10
  Author: CyberSEO.net
  Author URI: http://www.cyberseo.net/
  Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -12,21 +12,14 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
 	die();
 }
 
-define('CSYN_AUTOUPDATE_INTERVAL', 300);
 define('CSYN_MAX_CURL_REDIRECTS', 10);
-define('CSYN_LAST_AUTOUPDATE', 'cxxx_last_autoupdate');
 define('CSYN_SYNDICATED_FEEDS', 'cxxx_syndicated_feeds');
 define('CSYN_DISABLE_ENCODING', 'cxxx_disable_encoding');
 define('CSYN_RSS_PULL_MODE', 'cxxx_rss_pull_mode');
+define('CSYN_PSEUDO_CRON_INTERVAL', 'cxxx_pseudo_cron_interval');
 define('CSYN_CRON_MAGIC', 'cxxx_cron_magic');
+define('CSYN_LINK_TO_SOURCE', 'cxxx_link_to_source');
 define('CSYN_FEED_OPTIONS', 'cxxx_feed_options');
-
-if (!@is_admin() && (time() - (int) get_option(CSYN_LAST_AUTOUPDATE)) > CSYN_AUTOUPDATE_INTERVAL) {
-	csyn_set_option(CSYN_LAST_AUTOUPDATE, time(), '', 'yes');
-	$csyn_update_feeds_now = true;
-} else {
-	$csyn_update_feeds_now = false;
-}
 
 function csyn_set_option($option_name, $newvalue, $deprecated, $autoload) {
 	if (get_option($option_name) === false) {
@@ -120,6 +113,13 @@ function csyn_preset_options() {
 	if (get_option(CSYN_RSS_PULL_MODE) === false) {
 		csyn_set_option(CSYN_RSS_PULL_MODE, 'auto', '', 'yes');
 	}
+	if (get_option(CSYN_LINK_TO_SOURCE) === false) {
+		csyn_set_option(CSYN_LINK_TO_SOURCE, 'auto', '', 'yes');
+	}
+	if (get_option(CSYN_PSEUDO_CRON_INTERVAL) === false) {
+		csyn_set_option(CSYN_PSEUDO_CRON_INTERVAL, '10', '', 'yes');
+	}
+
 	if (get_option(CSYN_CRON_MAGIC) === false) {
 		csyn_set_option(CSYN_CRON_MAGIC, md5(time()), '', 'yes');
 	}
@@ -210,7 +210,6 @@ class CyberSyn_Syndicator {
 	}
 
 	function parseFeed($feed_url) {
-		global $csyn_disable_encoding;
 		$this->feed_charset_convert = $this->generator = $this->feed_title = $this->tag = '';
 		$this->insideitem = false;
 		$this->current_feed_url = $feed_url;
@@ -232,7 +231,7 @@ class CyberSyn_Syndicator {
 					break;
 				}
 
-				if ($csyn_disable_encoding != 'on' && $this->feed_charset != 'not defined' && strtolower($this->blog_charset ) != strtolower($this->feed_charset ) && function_exists('mb_convert_encoding')) {
+				if (get_option(CSYN_DISABLE_ENCODING) != 'on' && $this->feed_charset != 'not defined' && strtolower($this->blog_charset ) != strtolower($this->feed_charset ) && function_exists('mb_convert_encoding')) {
 					$line = mb_convert_encoding($line, $this->blog_charset, $this->feed_charset );
 				}
 
@@ -599,6 +598,7 @@ class CyberSyn_Syndicator {
 			remove_filter('excerpt_save_pre', 'wp_filter_post_kses');
 			$post_id = wp_insert_post($post);
 			add_post_meta($post_id, 'cyberseo_rss_source', $this->current_feed ['url']);
+			add_post_meta($post_id, 'cyberseo_post_link', $this->post ['link']);
 			$this->count ++;
 			if (function_exists('wp_set_post_categories')) {
 				wp_set_post_categories($post_id, $post_categories);
@@ -694,7 +694,7 @@ class CyberSyn_Syndicator {
 		if ($wp_version < '2.5') {
 			echo "<hr>\n";
 		}
-		echo '<form action="' . preg_replace('/\&edit-feed-id\=[0-9]+/', '', $_SERVER['REQUEST_URI']) . '" method="post">' . "\n";
+		echo '<form action="' . preg_replace('/\&edit-feed-id\=[0-9]+/', '', $_SERVER['REQUEST_URI']) . '" method="post" name="general_settings">' . "\n";
 ?>
 <table class="widefat" style="margin-top: .8em" width="100%">
 	<thead>
@@ -719,27 +719,39 @@ class CyberSyn_Syndicator {
 ?>
                 <tr>
 			<td>RSS Pull Mode</td>
-			<td><select style="width: 160px;"
-				name="<?php
-			echo CSYN_RSS_PULL_MODE;
-			?>">
+			<td><select style="width: 160px;" name="<?php echo CSYN_RSS_PULL_MODE; ?>" onchange="changeMode();">
 				<?php
 			echo '<option ' . ((get_option(CSYN_RSS_PULL_MODE) == "auto") ? 'selected ' : '') . 'value="auto">auto</option>' . "\n";
 			echo '<option ' . ((get_option(CSYN_RSS_PULL_MODE) == "cron") ? 'selected ' : '') . 'value="cron">by cron job or manually</option>' . "\n";
-?></select> - set the RSS pulling mode. I would suggest you to do
-			that by cron job once per hour or so. To do so, simple add the
-			following line into your crontab:<br />
-			<strong><?php
-			echo "0 * * * * /usr/bin/curl --silent " . get_option('siteurl') . "/?pull-feeds=" . get_option(CSYN_CRON_MAGIC);
-?></strong><br />
-			If you have no access to a crontab, or not sure on how to set a cron
-			job, set the RSS Pull Mode to "auto".</td>
-		</tr>
+?></select> - set the RSS pulling mode. If you have no access to a crontab, or not sure on how to set a cron job, set the RSS Pull Mode to "auto".
+<br />
+
+<p id="auto">
+In this mode, the CyberSyn plugin uses WordPress pseudo cron, which will be executed by the WordPress every <input type="text" name="<?php echo CSYN_PSEUDO_CRON_INTERVAL; ?>" size="1" value="<?php echo get_option(CSYN_PSEUDO_CRON_INTERVAL); ?>"> minutes.
+<br />
+The pseudo cron will trigger when someone visits your WordPress site, if the scheduled time has passed.
+</p>
+
+<p id="cron">
+In this mode, you need to manually configure <strong><a href="http://en.wikipedia.org/wiki/Cron" target="_blank">cron</a></strong> at your host. For example, if you want run a cron job once a hour, just add the following line into your crontab:
+<br />
+<strong><?php echo "0 * * * * /usr/bin/curl --silent " . get_option('siteurl') . "/?pull-feeds=" . get_option(CSYN_CRON_MAGIC); ?></strong>
+</p>
+			</td>
+	</tr>
+	<tr>
+			<td>Link syndicated posts to the original source</td>
+			<td>
+        <?php
+			echo '<input type="checkbox" name="' . CSYN_LINK_TO_SOURCE . '" ' . ((get_option(CSYN_LINK_TO_SOURCE) == 'on') ? 'checked ' : '') . '>';
+?>
+        </td>
+	</tr>
         <?php
 		}
 ?>
-                <tr>
-			<td width="290">
+	<tr>
+		<td width="290">
         <?php
 		if ($islocal) {
 			echo "Syndicate this feed to the following categories";
@@ -863,6 +875,7 @@ class CyberSyn_Syndicator {
 		</tr>
 	</tbody>
 </table>
+
 <?php
 		echo '<div class="submit">' . "\n";
 		if ($islocal) {
@@ -879,7 +892,6 @@ class CyberSyn_Syndicator {
 			echo '<input class="button-primary" name="update_default_settings" value="Update Default Settings" type="submit">' . "\n";
 		}
 		echo "</div>\n";
-
 		echo "</form>\n";
 	}
 
@@ -977,6 +989,7 @@ class CyberSyn_Syndicator {
 			if (version_compare($wp_version, '2.5', '<')) {
 				echo "<br /><hr>\n";
 			}
+		}
 ?>
 <div class="submit">
 <table width="100%">
@@ -1009,7 +1022,6 @@ class CyberSyn_Syndicator {
 </div>
 </form>
 <?php
-		}
 		if ($showsettings) {
 			$this->showSettings (false, $this->global_options );
 		}
@@ -1022,6 +1034,19 @@ function csyn_main_menu() {
 	}
 }
 
+function csyn_permalink($permalink) {
+	global $post;
+	if (get_option(CSYN_LINK_TO_SOURCE) == 'on') {
+		list($link) = get_post_custom_values('cyberseo_post_link');
+		if (filter_var($link, FILTER_VALIDATE_URL)) {
+			$permalink = $link;
+		} elseif (filter_var($post->guid, FILTER_VALIDATE_URL)) {
+			$permalink = $post->guid;
+		}
+	}
+	return $permalink;
+}
+
 function csyn_auto_update_feeds() {
 	global $csyn_syndicator;
 	$feed_cnt = count($csyn_syndicator->feeds );
@@ -1031,9 +1056,26 @@ function csyn_auto_update_feeds() {
 	}
 }
 
+function csyn_deactivation() {
+	wp_clear_scheduled_hook('update_by_wp_cron');
+}
+register_deactivation_hook(__FILE__, 'csyn_deactivation');
+
+function csyn_get_cuctom_cron_interval_name() {
+	return 'every ' . get_option(CSYN_PSEUDO_CRON_INTERVAL) . ' minutes';
+}
+
+function csyn_add_cuctom_cron_interval($schedules) {
+	$name = csyn_get_cuctom_cron_interval_name();
+	$schedules[$name] = array(
+		'interval' => intval(get_option(CSYN_PSEUDO_CRON_INTERVAL)) * 60,
+		'display'  => __($name)
+	);
+	return $schedules;
+}
+add_filter('cron_schedules', 'csyn_add_cuctom_cron_interval');
+
 $csyn_syndicator = new CyberSyn_Syndicator();
-$csyn_disable_encoding = get_option(CSYN_DISABLE_ENCODING);
-$csyn_rss_pull_mode = get_option(CSYN_RSS_PULL_MODE);
 if (isset($_GET['pull-feeds']) && $_GET['pull-feeds'] == get_option(CSYN_CRON_MAGIC)) {
 	add_action('shutdown', 'csyn_auto_update_feeds');
 }
@@ -1041,8 +1083,20 @@ if (is_admin()) {
 	csyn_preset_options();
 	add_action('admin_menu', 'csyn_main_menu');
 } else {
-	if ($csyn_update_feeds_now && strpos($csyn_rss_pull_mode, 'auto') !== false) {
-		add_action('shutdown', 'csyn_auto_update_feeds');
+	add_filter('post_link', 'csyn_permalink');
+	if (strpos(get_option(CSYN_RSS_PULL_MODE), "auto") !== false) {
+		if (function_exists('wp_next_scheduled')) {
+			add_action('update_by_wp_cron', 'csyn_auto_update_feeds');
+			if (!wp_next_scheduled('update_by_wp_cron')) {
+				wp_schedule_event(time(), csyn_get_cuctom_cron_interval_name(), 'update_by_wp_cron');
+			}
+		} else {
+			add_action('shutdown', 'csyn_auto_update_feeds');
+		}
+	} else {
+		if (function_exists('wp_clear_scheduled_hook') && wp_next_scheduled('update_by_wp_cron')) {
+			wp_clear_scheduled_hook('update_by_wp_cron');
+		}
 	}
 }
 ?>

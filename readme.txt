@@ -47,6 +47,11 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 2.10 =
+* The "Link syndicated posts to the original source" option has been added.
+* The RSS auto pull mode now uses the built-in WP pseudo cron.
+* Minor bugs fixed.
+
 = 2.1 =
 * All known bugs were fixed.
 
