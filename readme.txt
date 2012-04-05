@@ -48,7 +48,7 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 == Changelog ==
 
 = 2.11 =
-* The "[lost permalink](http://www.cyberseo.net/forum/support-eng/loss-of-permalink/)" issue fixed.
+* The "[loss of permalink](http://www.cyberseo.net/forum/support-eng/loss-of-permalink/)" issue fixed.
 
 = 2.10 =
 * The "Link syndicated posts to the original source" option has been added.
