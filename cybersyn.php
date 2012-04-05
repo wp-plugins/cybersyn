@@ -1,7 +1,7 @@
 <?php
 /*
  Plugin Name: CyberSyn
- Version: 2.10
+ Version: 2.11
  Author: CyberSEO.net
  Author URI: http://www.cyberseo.net/
  Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -1036,13 +1036,11 @@ function csyn_main_menu() {
 
 function csyn_permalink($permalink) {
 	global $post;
-	if (get_option(CSYN_LINK_TO_SOURCE) == 'on') {
-		list($link) = get_post_custom_values('cyberseo_post_link');
-		if (filter_var($link, FILTER_VALIDATE_URL)) {
-			$permalink = $link;
-		} elseif (filter_var($post->guid, FILTER_VALIDATE_URL)) {
-			$permalink = $post->guid;
-		}
+	list($link) = get_post_custom_values('cyberseo_post_link');
+	if (filter_var($link, FILTER_VALIDATE_URL)) {
+		$permalink = $link;
+	} elseif (filter_var($post->guid, FILTER_VALIDATE_URL)) {
+		$permalink = $post->guid;
 	}
 	return $permalink;
 }
@@ -1083,7 +1081,9 @@ if (is_admin()) {
 	csyn_preset_options();
 	add_action('admin_menu', 'csyn_main_menu');
 } else {
-	add_filter('post_link', 'csyn_permalink');
+	if (get_option(CSYN_LINK_TO_SOURCE) == 'on') {
+		add_filter('post_link', 'csyn_permalink', 1);
+	}
 	if (strpos(get_option(CSYN_RSS_PULL_MODE), "auto") !== false) {
 		if (function_exists('wp_next_scheduled')) {
 			add_action('update_by_wp_cron', 'csyn_auto_update_feeds');
