@@ -16,10 +16,12 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 
 Features:
 
-1. The CyberSyn plugin parses the RSS feeds for those XML elements only that can be imported into WordPress posts and ignores everything else. So it has a rather compact and extremely fast code!
-2. Advanced RSS parsing algorithm has an ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated from the feed at once. This is a very useful feature for SEO of your blogs, because search engines don't like blogs that add 100 or more posts at once.
-3. Adjustable post uniqueness identification by GUID, post name or both.
-4. CyberSyn has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
+1. The CyberSyn plugin parses the RSS and Atom feeds for those XML elements only that can be imported into WordPress posts and ignores everything else. So it has a rather compact and extremely fast code!
+2. Integradet with TBS (The Best Spinner).
+3. Can store syndicated images on the local host.
+4. Advanced RSS/Atom parsing algorithm has an ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated from the feed at once. This is a very useful feature for SEO of your blogs, because search engines don't like blogs that add 100 or more posts at once.
+5. Adjustable post uniqueness identification by GUID, post name or both.
+6. CyberSyn has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
 
 Requirements:
 
