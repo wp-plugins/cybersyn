@@ -3,9 +3,9 @@ Contributors: CyberSEO
 Plugin URI: http://www.cyberseo.net/cybersyn/
 Author: CyberSEO
 Author URI: http://www.cyberseo.net/
-Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging
-Requires at least: 2.0.0
-Tested up to: 3.3.1
+Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging, Content Curation, Spinner, TBS, The Best Spinner
+Requires at least: 3.0.0
+Tested up to: 3.5.1
 Stable tag: 4.3
 
 A powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
@@ -46,6 +46,15 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 3.00 =
+* The plugin is now integrated with TBS (The Best Spinner) - the most popular content spinning service.
+* The post images now can be stored locally (copied to your own host).
+* The syndicated posts now can be attributed to the chosen author.
+* Now the one can to specify a list of tags for for the each feed.
+* The media attachment handling has been sufficiently improved.
+* The character encoding conversion has been added.
+* Now the one can specify the HTML code with will be inserted to the bottom of each syndicated post (so-called post footers).
 
 = 2.11 =
 * The "[loss of permalink](http://www.cyberseo.net/forum/support-eng/loss-of-permalink/)" issue fixed.
