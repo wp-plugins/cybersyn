@@ -16,21 +16,24 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 
 Features:
 
-1. The CyberSyn plugin parses the RSS and Atom feeds for those XML elements only that can be imported into WordPress posts and ignores everything else. So it has a rather compact and extremely fast code!
-2. Integradet with TBS (The Best Spinner).
-3. Can store syndicated images on the local host.
-4. Advanced RSS/Atom parsing algorithm has an ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated from the feed at once. This is a very useful feature for SEO of your blogs, because search engines don't like blogs that add 100 or more posts at once.
+1. CyberSyn parses the RSS and Atom feeds for specific XML elements only and ignores everything else. So it's rather compact and extremely fast.
+2. The plugin is integraded with TBS (The Best Spinner).
+3. Allows to store syndicated images on the local host.
+4. Advanced RSS/Atom parsing algorithm has the ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated at once. This is a very useful feature for SEO of your blogs.
 5. Adjustable post uniqueness identification by GUID, post name or both.
 6. CyberSyn has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
 
 Requirements:
 
+
 1. PHP 5.2.4 or greater
 2. MySQL 5.0 or greater
-3. PHP cURL extension (recommended)
-4. PHP variable safe_mode must be disabled (if cURL is not installed)
-5. PHP variable allow_url_fopen must be enabled (if cURL is not installed)
-6. Access to cron on server (recommended)
+3. PHP mbstring extension
+4. PHP cURL extension (recommended)
+5. PHP variable safe_mode must be disabled (if cURL is not installed)
+6. PHP variable allow_url_fopen must be enabled (if cURL is not installed)
+7. Access to cron on server (recommended)
+
 
 == Installation ==
 

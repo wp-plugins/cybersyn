@@ -1,18 +1,18 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.00
-  Author: CyberSyn.net
+  Version: 3.01
+  Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
   Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
 
+$csyn_version_id = '3.01';
+
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
 }
-
-$csyn_version_id = '3.00';
 
 define('CSYN_MAX_CURL_REDIRECTS', 10);
 define('CSYN_MAX_DONLOAD_ATTEMPTS', 10);
@@ -1137,7 +1137,7 @@ class CyberSyn_Syndicator {
                     <td><select name="synonymizer_mode" size="1">
                             <?php
                             echo '<option ' . (($settings["synonymizer_mode"] == "0") ? 'selected ' : '') . 'value="0">Disabled</option>' . "\n";
-                            echo '<option ' . (($settings["synonymizer_mode"] == "11") ? 'selected ' : '') . 'value="11">Use TheBestSpinner</option>' . "\n";
+                            echo '<option ' . (($settings["synonymizer_mode"] == "11") ? 'selected ' : '') . 'value="11">Use The Best Spinner</option>' . "\n";
                             ?>
                         </select></td>
                 </tr>
@@ -1159,7 +1159,7 @@ class CyberSyn_Syndicator {
                     <td><select name="undefined_category" size="1">
                             <?php
                             if ($islocal) {
-                                echo '<option ' . (($settings["undefined_category"] == "use_global") ? 'selected ' : '') . 'value="use_global">Use XML syndicator default settings</option>' . "\n";
+                                echo '<option ' . (($settings["undefined_category"] == "use_global") ? 'selected ' : '') . 'value="use_global">Use RSS/Atom default settings</option>' . "\n";
                             }
                             echo '<option ' . (($settings["undefined_category"] == "use_default") ? 'selected ' : '') . 'value="use_default">Post to default WordPress category</option>' . "\n";
                             echo '<option ' . (($settings["undefined_category"] == "create_new") ? 'selected ' : '') . 'value="create_new">Create new categories defined in syndicating post</option>' . "\n";
@@ -1260,7 +1260,7 @@ class CyberSyn_Syndicator {
                         </select> - if enabled CyberSyn syndicator will insert media attachments (if available) into the aggregating post. The
                         following types of attachments are supported: <strong>&lt;media:content&gt;</strong>,
                         <strong>&lt;media:thumbnail&gt;</strong> and <strong>&lt;enclosure&gt;</strong>
-                        (type "image" only)<br /> All the aggregated images will contain <strong>class="media_thumbnail"</strong>
+                        (type "image" only) All the aggregated images will contain <strong>class="media_thumbnail"</strong>
                         in the <strong>&lt;img&gt;</strong> tag.</td>
                 </tr>
 

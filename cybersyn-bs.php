@@ -1,6 +1,6 @@
 <?php
 /*
-  Copyright (c) 2005-2013 by CyberSyn (http://www.cyberseo.net). All Rights Reserved.
+  Copyright (c) 2005-2013 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
  */
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
