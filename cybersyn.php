@@ -1,14 +1,14 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.01
+  Version: 3.02
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
   Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
 
-$csyn_version_id = '3.01';
+$csyn_version_id = '3.02';
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
@@ -38,7 +38,7 @@ $csyn_banner = '        <div style="background-color:#FFFFCC; padding:10px 10px 
             - spin, synonymize and rewrite every syndicated post, shuffle its paragraphs, add any random HTML blocks as headers and footers.<br />
             - automatically generate featured images (post thumbnails);<br />
             - translate the articles to any language on the fly with any translation service of your choice (Google Translate, Yahoo! Babel Fish, Yandex Translate etc);<br />
-            - run a self-populating blogs, tubes, pinboards, image galleries, online magazines, Q/A sites, online shops and many more;<br />
+            - run a self-populating blogs, tubes, pinboards, image galleries, online magazines, Q&amp;A sites, online shops and many more;<br />
             - write your own extensions and get unlimited power on syndicating content!<br />
             <h3><a href="http://www.cyberseo.net/" target="_blank">Click here to get CyberSEO today!</a> Don\'t forget to enter this coupon code for 10% discount: "CSYNUSER"</h3>
         </div>';
@@ -954,7 +954,7 @@ class CyberSyn_Syndicator {
                 $content = csyn_fix_white_spaces($post['post_content']);
                 $excerpt = csyn_fix_white_spaces($post['post_excerpt']);
                 $divider = ' 888011000110888 ';
-                $packet = csyn_morph_content($title . $divider . $content . $divider . $excerpt);
+                $packet = csyn_spin_content($title . $divider . $content . $divider . $excerpt);
                 list($title, $content, $excerpt) = explode($divider, $packet);
                 $post['post_title'] = $wpdb->escape($title);
                 $post['post_content'] = $wpdb->escape(csyn_touch_post_content($content, $attachment, $attachment_status));
@@ -1452,7 +1452,7 @@ function csyn_thebestspinner($content) {
     return $content;
 }
 
-function csyn_morph_content($content) {
+function csyn_spin_content($content) {
     global $csyn_syndicator;
 
     if (count($csyn_syndicator->current_feed)) {
@@ -1461,7 +1461,7 @@ function csyn_morph_content($content) {
         $synonymizer_mode = $csyn_syndicator->global_options ['synonymizer_mode'];
     }
 
-    if ($synonymizer_mode = '11') {
+    if ($synonymizer_mode == '11') {
         $content = csyn_thebestspinner($content);
     }
 

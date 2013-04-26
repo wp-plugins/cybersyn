@@ -52,6 +52,14 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 3.02 =
+* Fixed bug which caused the plugin to use "The Best Spinner" even if disabled.
+
+= 3.01 =
+* Minor changes.
+
+== Changelog ==
+
 = 3.00 =
 * The plugin is now integrated with TBS (The Best Spinner) - the most popular content spinning service.
 * The post images now can be stored locally (copied to your own host).
