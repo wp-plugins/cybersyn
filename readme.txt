@@ -53,7 +53,7 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 == Changelog ==
 
 = 3.02 =
-* Fixed bug which caused the plugin to use "The Best Spinner" even if disabled.
+* Fixed bug which forced the plugin to use "The Best Spinner" even if disabled.
 
 = 3.01 =
 * Minor changes.
