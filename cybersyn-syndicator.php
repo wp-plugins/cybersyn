@@ -92,6 +92,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['convert_encoding'] = @$_POST['convert_encoding'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['store_images'] = @$_POST['store_images'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['include_post_footers'] = @$_POST['include_post_footers'];
+        $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['embed_videos'] = @$_POST['embed_videos'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['create_tags'] = @$_POST['create_tags'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['post_tags'] = $_POST['post_tags'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['post_footer'] = $_POST['post_footer'];
@@ -154,6 +155,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         $feed['options']['convert_encoding'] = @$_POST['convert_encoding'];
         $feed['options']['store_images'] = @$_POST['store_images'];
         $feed['options']['include_post_footers'] = @$_POST['include_post_footers'];
+        $feed['options']['embed_videos'] = @$_POST['embed_videos'];
         $feed['options']['create_tags'] = @$_POST['create_tags'];
         $feed['options']['max_items'] = abs((int) $_POST['max_items']);
         $feed['options']['post_footer'] = $_POST['post_footer'];
@@ -189,6 +191,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         $csyn_syndicator->global_options ['convert_encoding'] = @$_POST['convert_encoding'];
         $csyn_syndicator->global_options ['store_images'] = @$_POST['store_images'];
         $csyn_syndicator->global_options ['include_post_footers'] = @$_POST['include_post_footers'];
+        $csyn_syndicator->global_options ['embed_videos'] = @$_POST['embed_videos'];
         $csyn_syndicator->global_options ['create_tags'] = @$_POST['create_tags'];
         $csyn_syndicator->global_options ['post_tags'] = $_POST['post_tags'];
         $csyn_syndicator->global_options ['post_footer'] = $_POST['post_footer'];

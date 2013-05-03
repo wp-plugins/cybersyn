@@ -1,14 +1,14 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.02
+  Version: 3.10
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
   Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
 
-$csyn_version_id = '3.02';
+$csyn_version_id = '3.10';
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
@@ -186,87 +186,37 @@ function csyn_file_get_contents($url, $as_array = false) {
 }
 
 function csyn_update_options(&$options) {
+    $defaults = array('interval' => 1440,
+        'max_items' => 1,
+        'post_status' => 'publish',
+        'comment_status' => 'open',
+        'ping_status' => 'closed',
+        'post_author' => 1,
+        'base_date' => 'post',
+        'duplicate_check_method' => 'guid_and_title',
+        'undefined_category' => 'use_default',
+        'synonymizer_mode' => '0',
+        'create_tags' => '',
+        'post_tags' => '',
+        'post_category' => array(),
+        'date_min' => 0,
+        'date_max' => 0,
+        'insert_media_attachments' => 'no',
+        'convert_encoding' => '',
+        'store_images' => '',
+        'post_footer' => "",
+        'include_post_footers' => '',
+        'embed_videos' => '');
+
     $result = 0;
-    if (!isset($options['interval'])) {
-        $options['interval'] = 1440;
-        $result = 1;
+
+    foreach ($defaults as $key => $value) {
+        if (!isset($options[$key])) {
+            $options[$key] = $value;
+            $result = 1;
+        }
     }
-    if (!isset($options['max_items'])) {
-        $options['max_items'] = 1;
-        $result = 1;
-    }
-    if (!isset($options['post_status'])) {
-        $options['post_status'] = 'publish';
-        $result = 1;
-    }
-    if (!isset($options['comment_status'])) {
-        $options['comment_status'] = 'open';
-        $result = 1;
-    }
-    if (!isset($options['ping_status'])) {
-        $options['ping_status'] = 'closed';
-        $result = 1;
-    }
-    if (!isset($options['post_author'])) {
-        $options['post_author'] = 1;
-        $result = 1;
-    }
-    if (!isset($options['base_date'])) {
-        $options['base_date'] = 'post';
-        $result = 1;
-    }
-    if (!isset($options['duplicate_check_method'])) {
-        $options['duplicate_check_method'] = 'guid_and_title';
-        $result = 1;
-    }
-    if (!isset($options['undefined_category'])) {
-        $options['undefined_category'] = 'use_default';
-        $result = 1;
-    }
-    if (!isset($options['synonymizer_mode'])) {
-        $options['synonymizer_mode'] = '0';
-        $result = 0;
-    }
-    if (!isset($options['create_tags'])) {
-        $options['create_tags'] = '';
-        $result = 1;
-    }
-    if (!isset($options['post_tags'])) {
-        $options['post_tags'] = '';
-        $result = 1;
-    }
-    if (!isset($options['post_category'])) {
-        $options['post_category'] = array();
-        $result = 1;
-    }
-    if (!isset($options['date_min'])) {
-        $options['date_min'] = 0;
-        $result = 1;
-    }
-    if (!isset($options['date_max'])) {
-        $options['date_max'] = 0;
-        $result = 1;
-    }
-    if (!isset($options['insert_media_attachments'])) {
-        $options['insert_media_attachments'] = 'no';
-        $result = 1;
-    }
-    if (!isset($options['convert_encoding'])) {
-        $options['convert_encoding'] = '';
-        $result = 1;
-    }
-    if (!isset($options['store_images'])) {
-        $options['store_images'] = '';
-        $result = 1;
-    }
-    if (!isset($options['include_post_footers'])) {
-        $options['include_post_footers'] = '';
-        $result = 1;
-    }
-    if (!isset($options['post_footer'])) {
-        $options['post_footer'] = "";
-        $result = 1;
-    }
+
     return $result;
 }
 
@@ -376,6 +326,19 @@ class CyberSyn_Syndicator {
             $url = "http://" . $url;
         }
         return $url;
+    }
+
+    function extractEmbeddableCode($content) {
+        preg_match('/www\.youtube\.com\/watch\?v=(.+)&/', $content, $matches);
+        if (isset($matches[1])) {
+            $id = $matches[1];
+            $video_page = csyn_file_get_contents('http://www.youtube.com/watch?v=' . $id);
+            preg_match('/<div id="watch-description-text">(.*?)<\/div>/is', $video_page, $matches);
+            if (isset($matches[1])) {
+                return '<p><iframe class="embedded_video" width="560" height="315" src="http://www.youtube.com/embed/' . $id . '" frameborder="0" allowfullscreen></iframe></p>' . $matches[1];
+            }
+        }
+        return $content;
     }
 
     function resetPost() {
@@ -718,8 +681,8 @@ class CyberSyn_Syndicator {
                     $this->post ['post_excerpt'] .= $data;
                     break;
                 case "LINK":
-                    if (trim($data) != '') {
-                        $this->post ['link'] = trim($data);
+                    if (trim($data) != "") {
+                        $this->post ['link'] .= trim($data);
                     }
                     break;
                 case "CONTENT:ENCODED":
@@ -926,10 +889,14 @@ class CyberSyn_Syndicator {
                     }
                 }
 
-                $attachment_status = $this->current_feed ['options']['insert_media_attachments'];
+                $attachment_status = $this->current_feed['options']['insert_media_attachments'];
 
-                $post['post_content'] = $this->post ['post_content'];
-                $post['post_excerpt'] = $this->post ['post_excerpt'];
+                $post['post_content'] = $this->post['post_content'];
+                $post['post_excerpt'] = $this->post['post_excerpt'];
+
+                if ($this->current_feed ['options']['embed_videos'] == 'on') {
+                    $post['post_excerpt'] = $post['post_content'] = $this->extractEmbeddableCode($post['post_content']);
+                }
 
                 if ($this->current_feed ['options']['store_images'] == 'on') {
                     preg_match_all('/<img(.+?)src=[\'\"](.+?)[\'\"](.*?)>/is', $post['post_content'] . $post['post_excerpt'], $matches);
@@ -1249,6 +1216,7 @@ class CyberSyn_Syndicator {
                             ?>
                         </select></td>
                 </tr>
+
                 <tr>
                     <td>Media attachments</td>
                     <td><select name="insert_media_attachments" size="1">
@@ -1272,6 +1240,7 @@ class CyberSyn_Syndicator {
                             ?>
                     </td>
                 </tr>
+
                 <tr>
                     <td>Store images locally</td>
                     <td><?php
@@ -1279,6 +1248,7 @@ class CyberSyn_Syndicator {
                             ?>
                     </td>
                 </tr>
+
                 <tr>
                     <td>Post date adjustment range</td>
                     <td><?php
@@ -1288,6 +1258,7 @@ class CyberSyn_Syndicator {
                         the adjustment range as [0..60], the post dates will be increased by random value between 0 and 60 minutes.
                     </td>
                 </tr>
+
                 <tr>
                     <td>Post footer</td>
                     <td><?php
@@ -1296,6 +1267,7 @@ class CyberSyn_Syndicator {
                             ?>
                     </td>
                 </tr>
+
                 <tr>
                     <td>Insert post footer into excerpts</td>
                     <td><?php
@@ -1303,6 +1275,14 @@ class CyberSyn_Syndicator {
                             ?>
                     </td>
                 </tr>
+
+                <tr>
+                    <td>Embed videos</td>
+                    <td><?php
+                echo '<input type="checkbox" name="embed_videos" ' . (($settings['embed_videos'] == 'on') ? 'checked ' : '') . '> - the embeddable videos will be automatically extracted and inserted into the posts. Feed sources supported: YouTube only.';
+                            ?>
+                    </td>
+                </tr>                
 
             </tbody>
         </table>

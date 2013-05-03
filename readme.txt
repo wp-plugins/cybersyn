@@ -3,7 +3,7 @@ Contributors: CyberSEO
 Plugin URI: http://www.cyberseo.net/cybersyn/
 Author: CyberSEO
 Author URI: http://www.cyberseo.net/
-Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging, Content Curation, Spinner, TBS, The Best Spinner
+Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging, Content Curation, Spinner, TBS, The Best Spinner, YouTube, YouTube Video Parser
 Requires at least: 3.0.0
 Tested up to: 3.5.1
 Stable tag: 4.3
@@ -16,12 +16,13 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 
 Features:
 
-1. CyberSyn parses the RSS and Atom feeds for specific XML elements only and ignores everything else. So it's rather compact and extremely fast.
-2. The plugin is integraded with TBS (The Best Spinner).
-3. Allows to store syndicated images on the local host.
-4. Advanced RSS/Atom parsing algorithm has the ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated at once. This is a very useful feature for SEO of your blogs.
-5. Adjustable post uniqueness identification by GUID, post name or both.
-6. CyberSyn has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
+1. Parses the RSS and Atom feeds for specific XML elements only and ignores everything else. So it's rather compact and extremely fast.
+2. Integraded with TBS (The Best Spinner).
+3. Allows to automatically embed videos from standard YouTube RSS feeds. Just enable the "Embed videos" option and plugin will automatically extract and embed YouTube videos among with their full descriptions directly into your posts.
+4. Allows to store syndicated images on the local host.
+5. Advanced RSS/Atom parsing algorithm has the ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated at once. This is a very useful feature for SEO of your blogs.
+6. Adjustable post uniqueness identification by GUID, post name or both.
+7. The plugin has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
 
 Requirements:
 
@@ -52,13 +53,14 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 3.10 =
+* Added possibility to automatically embed videos from standard YouTube RSS feeds.
+
 = 3.02 =
 * Fixed bug which forced the plugin to use "The Best Spinner" even if disabled.
 
 = 3.01 =
 * Minor changes.
-
-== Changelog ==
 
 = 3.00 =
 * The plugin is now integrated with TBS (The Best Spinner) - the most popular content spinning service.
