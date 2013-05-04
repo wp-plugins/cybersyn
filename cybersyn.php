@@ -1,14 +1,14 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.10
+  Version: 3.11
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
   Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
 
-$csyn_version_id = '3.10';
+$csyn_version_id = '3.11';
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
@@ -922,7 +922,9 @@ class CyberSyn_Syndicator {
                 $excerpt = csyn_fix_white_spaces($post['post_excerpt']);
                 $divider = ' 888011000110888 ';
                 $packet = csyn_spin_content($title . $divider . $content . $divider . $excerpt);
-                list($title, $content, $excerpt) = explode($divider, $packet);
+                if (substr_count($packet, $divider) == 2) {
+                    list($title, $content, $excerpt) = explode($divider, $packet);
+                }
                 $post['post_title'] = $wpdb->escape($title);
                 $post['post_content'] = $wpdb->escape(csyn_touch_post_content($content, $attachment, $attachment_status));
                 $post['post_excerpt'] = $wpdb->escape(csyn_touch_post_content($excerpt, $attachment, $attachment_status, $inc_footerss));
@@ -1041,7 +1043,7 @@ class CyberSyn_Syndicator {
     }
 
     function showSettings($islocal, $settings) {
-        global $wp_version, $wpdb;
+        global $wp_version, $wpdb, $csyn_bs_options;
         if (version_compare($wp_version, '2.5', '<')) {
             echo "<hr>\n";
         }
@@ -1101,12 +1103,25 @@ class CyberSyn_Syndicator {
 
                 <tr>
                     <td>Content spinner</td>
-                    <td><select name="synonymizer_mode" size="1">
+                    <td>
+                        <?php
+                        if (strlen($csyn_bs_options['username']) && strlen($csyn_bs_options['password'])) {
+                            $status = '';
+                            $hint = '';
+                        } else {
+                            $status = 'disabled';
+                            $settings["synonymizer_mode"] = 0;
+                            $hint = 'In order to use <a href="http://www.cyberseo.net/partners/thebestspinner.php" target="_blank">The Best Spinner</a>, you must enter your account info first.';
+                        }
+                        ?>
+                        <select name="synonymizer_mode" size="1" <?php echo $status; ?>>    
                             <?php
                             echo '<option ' . (($settings["synonymizer_mode"] == "0") ? 'selected ' : '') . 'value="0">Disabled</option>' . "\n";
                             echo '<option ' . (($settings["synonymizer_mode"] == "11") ? 'selected ' : '') . 'value="11">Use The Best Spinner</option>' . "\n";
-                            ?>
-                        </select></td>
+                            ?> 
+                        </select>
+                        <?php echo $hint; ?>
+                    </td>
                 </tr>
 
                 <tr>
@@ -1137,14 +1152,14 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Create tags from category names</td>
                     <td><?php
-                    echo '<input type="checkbox" name="create_tags" ' . (($settings['create_tags'] == 'on') ? 'checked ' : '') . '>';
+                            echo '<input type="checkbox" name="create_tags" ' . (($settings['create_tags'] == 'on') ? 'checked ' : '') . '>';
                             ?>
                     </td>
                 </tr>
                 <tr>
                     <td>Post tags (separate with commas)</td>
                     <td><?php
-                echo '<input type="text" name="post_tags" value="' . stripslashes($settings['post_tags']) . '" size="60">';
+                            echo '<input type="text" name="post_tags" value="' . stripslashes($settings['post_tags']) . '" size="60">';
                             ?>
                     </td>
                 </tr>
@@ -1160,21 +1175,21 @@ class CyberSyn_Syndicator {
                 </tr>
                 <tr>
                     <td><?php
-                    if ($islocal) {
-                        echo 'Check this feed for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need automatic updates set this parameter to 0.';
-                    } else {
-                        echo 'Check syndicated feeds for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need auto updates, just set this parameter to 0.';
-                    }
-                    if (defined("CSYN_MIN_UPDATE_TIME")) {
-                        echo " <strong>This option is limited by Administrator:<strong> the update period can not be less than " . CSYN_MIN_UPDATE_TIME . " minutes.";
-                    }
+                            if ($islocal) {
+                                echo 'Check this feed for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need automatic updates set this parameter to 0.';
+                            } else {
+                                echo 'Check syndicated feeds for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need auto updates, just set this parameter to 0.';
+                            }
+                            if (defined("CSYN_MIN_UPDATE_TIME")) {
+                                echo " <strong>This option is limited by Administrator:<strong> the update period can not be less than " . CSYN_MIN_UPDATE_TIME . " minutes.";
+                            }
                             ?>
                     </td>
                 </tr>
                 <tr>
                     <td>Maximum number of posts to be syndicated from each feed at once</td>
                     <td><?php
-                echo '<input type="text" name="max_items" value="' . $settings['max_items'] . '" size="3">' . " - use low values to decrease the syndication time and improve SEO of your blog.";
+                            echo '<input type="text" name="max_items" value="' . $settings['max_items'] . '" size="3">' . " - use low values to decrease the syndication time and improve SEO of your blog.";
                             ?>
                     </td>
                 </tr>
@@ -1235,7 +1250,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Convert character encoding</td>
                     <td><?php
-                    echo '<input type="checkbox" name="convert_encoding" ' . (($settings['convert_encoding'] == 'on') ? 'checked ' : '') . '> - enables character encoding conversion.
+                            echo '<input type="checkbox" name="convert_encoding" ' . (($settings['convert_encoding'] == 'on') ? 'checked ' : '') . '> - enables character encoding conversion.
                 This option might be useful when parsing XML/RSS feeds in national charsets different than UTF-8.';
                             ?>
                     </td>
@@ -1244,7 +1259,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Store images locally</td>
                     <td><?php
-                echo '<input type="checkbox" name="store_images" ' . (($settings['store_images'] == 'on') ? 'checked ' : '') . '> - if enabled, all images from the syndicating feeds will be copied into the default uploads folder of this blog. Make sure that your /wp-content/uploads folder is writable.';
+                            echo '<input type="checkbox" name="store_images" ' . (($settings['store_images'] == 'on') ? 'checked ' : '') . '> - if enabled, all images from the syndicating feeds will be copied into the default uploads folder of this blog. Make sure that your /wp-content/uploads folder is writable.';
                             ?>
                     </td>
                 </tr>
@@ -1252,7 +1267,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Post date adjustment range</td>
                     <td><?php
-                echo '[<input type="text" name="date_min" value="' . $settings['date_min'] . '" size="6"> .. <input type="text" name="date_max" value="' . $settings['date_max'] . '" size="6">]';
+                            echo '[<input type="text" name="date_min" value="' . $settings['date_min'] . '" size="6"> .. <input type="text" name="date_max" value="' . $settings['date_max'] . '" size="6">]';
                             ?>
                         - here you can set the syndication date adjustment range in minutes. This range will be used to randomly adjust the publication date for every aggregated post. For example, if you set
                         the adjustment range as [0..60], the post dates will be increased by random value between 0 and 60 minutes.
@@ -1262,8 +1277,8 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Post footer</td>
                     <td><?php
-                echo '<input type="text" name="post_footer" value="' . htmlspecialchars(stripslashes($settings['post_footer']), ENT_QUOTES) . '" size="60">';
-                echo ' - the HTML code wich will be inserted into the bottom of each syndicated post.' . "\n";
+                            echo '<input type="text" name="post_footer" value="' . htmlspecialchars(stripslashes($settings['post_footer']), ENT_QUOTES) . '" size="60">';
+                            echo ' - the HTML code wich will be inserted into the bottom of each syndicated post.' . "\n";
                             ?>
                     </td>
                 </tr>
@@ -1271,7 +1286,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Insert post footer into excerpts</td>
                     <td><?php
-                echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to inserted the post footer into the post excerpt.';
+                            echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to inserted the post footer into the post excerpt.';
                             ?>
                     </td>
                 </tr>
@@ -1279,7 +1294,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Embed videos</td>
                     <td><?php
-                echo '<input type="checkbox" name="embed_videos" ' . (($settings['embed_videos'] == 'on') ? 'checked ' : '') . '> - the embeddable videos will be automatically extracted and inserted into the posts. Feed sources supported: YouTube only.';
+                            echo '<input type="checkbox" name="embed_videos" ' . (($settings['embed_videos'] == 'on') ? 'checked ' : '') . '> - the embeddable videos will be automatically extracted and inserted into the posts. Feed sources supported: YouTube only.';
                             ?>
                     </td>
                 </tr>                
@@ -1412,21 +1427,23 @@ function csyn_set_option($option_name, $newvalue, $deprecated, $autoload) {
 function csyn_thebestspinner($content) {
     global $csyn_bs_options;
 
-    $url = 'http://thebestspinner.com/api.php';
-    $data = array();
-    $data['action'] = 'authenticate';
-    $data['format'] = 'php';
-    $data['username'] = $csyn_bs_options['username'];
-    $data['password'] = $csyn_bs_options['password'];
-    $result = unserialize(csyn_curl_post($url, $data, $info));
-    if (isset($result['success']) && $result['success'] == 'true') {
-        $data['session'] = $result['session'];
-        $data['action'] = 'rewriteText';
-        $data['protectedterms'] = $csyn_bs_options['protectedterms'];
-        $data['text'] = $content;
+    if (strlen($csyn_bs_options['username']) && strlen($csyn_bs_options['password'])) {
+        $url = 'http://thebestspinner.com/api.php';
+        $data = array();
+        $data['action'] = 'authenticate';
+        $data['format'] = 'php';
+        $data['username'] = $csyn_bs_options['username'];
+        $data['password'] = $csyn_bs_options['password'];
         $result = unserialize(csyn_curl_post($url, $data, $info));
-        if ($result['success'] == 'true') {
-            return $result['output'];
+        if (isset($result['success']) && $result['success'] == 'true') {
+            $data['session'] = $result['session'];
+            $data['action'] = 'rewriteText';
+            $data['protectedterms'] = $csyn_bs_options['protectedterms'];
+            $data['text'] = $content;
+            $result = unserialize(csyn_curl_post($url, $data, $info));
+            if ($result['success'] == 'true') {
+                return $result['output'];
+            }
         }
     }
     return $content;

@@ -53,6 +53,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 3.11 =
+* The Best Spinner integration has been improved.
+
 = 3.10 =
 * Added possibility to automatically embed videos from standard YouTube RSS feeds.
 
