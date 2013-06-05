@@ -53,6 +53,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 3.12 =
+* The default user agent header has been removed from HTTP requests. It was causing problems with FeedBurner feeds.
+
 = 3.11 =
 * The Best Spinner integration has been improved.
 
@@ -69,10 +72,10 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 * The plugin is now integrated with TBS (The Best Spinner) - the most popular content spinning service.
 * The post images now can be stored locally (copied to your own host).
 * The syndicated posts now can be attributed to the chosen author.
-* Now the one can to specify a list of tags for for the each feed.
+* Now one can specify a list of tags for for the each feed.
 * The media attachment handling has been sufficiently improved.
 * The character encoding conversion has been added.
-* Now the one can specify the HTML code with will be inserted to the bottom of each syndicated post (so-called post footers).
+* Now one can specify the HTML code with will be inserted to the bottom of each syndicated post (so-called post footers).
 
 = 2.11 =
 * The "[loss of permalink](http://www.cyberseo.net/forum/support-eng/loss-of-permalink/)" issue fixed.

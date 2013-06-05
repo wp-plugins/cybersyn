@@ -1,14 +1,14 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.11
+  Version: 3.12
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
   Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
 
-$csyn_version_id = '3.11';
+$csyn_version_id = '3.12';
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
@@ -16,7 +16,6 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
 
 define('CSYN_MAX_CURL_REDIRECTS', 10);
 define('CSYN_MAX_DONLOAD_ATTEMPTS', 10);
-define('CSYN_CURL_USER_AGENT', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.92 Safari/535.2');
 define('CSYN_FEED_OPTIONS', 'cxxx_feed_options');
 define('CSYN_SYNDICATED_FEEDS', 'cxxx_syndicated_feeds');
 define('CSYN_RSS_PULL_MODE', 'cxxx_rss_pull_mode');
@@ -38,8 +37,8 @@ $csyn_banner = '        <div style="background-color:#FFFFCC; padding:10px 10px 
             - spin, synonymize and rewrite every syndicated post, shuffle its paragraphs, add any random HTML blocks as headers and footers.<br />
             - automatically generate featured images (post thumbnails);<br />
             - translate the articles to any language on the fly with any translation service of your choice (Google Translate, Yahoo! Babel Fish, Yandex Translate etc);<br />
-            - run a self-populating blogs, tubes, pinboards, image galleries, online magazines, Q&amp;A sites, online shops and many more;<br />
-            - write your own extensions and get unlimited power on syndicating content!<br />
+            - run self-populating blogs, tubes, pinboards, image galleries, online magazines, Q&amp;A sites, online shops and many more;<br />
+            - use your own PHP extensions to get the unlimited power on syndicating content!<br />
             <h3><a href="http://www.cyberseo.net/" target="_blank">Click here to get CyberSEO today!</a> Don\'t forget to enter this coupon code for 10% discount: "CSYNUSER"</h3>
         </div>';
 
@@ -58,7 +57,6 @@ function csyn_curl_post($url, $data, &$info) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, csyn_mk_post_data($data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_USERAGENT, CSYN_CURL_USER_AGENT);
     @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     $result = trim(curl_exec($ch));
     $info = curl_getinfo($ch);
@@ -115,7 +113,6 @@ function csyn_file_get_contents($url, $as_array = false) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_REFERER, $url);
-        curl_setopt($ch, CURLOPT_USERAGENT, CSYN_CURL_USER_AGENT);
         curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         if (ini_get('open_basedir') == '' && (ini_get('safe_mode' == 'Off') || !ini_get('safe_mode'))) {
@@ -1270,7 +1267,7 @@ class CyberSyn_Syndicator {
                             echo '[<input type="text" name="date_min" value="' . $settings['date_min'] . '" size="6"> .. <input type="text" name="date_max" value="' . $settings['date_max'] . '" size="6">]';
                             ?>
                         - here you can set the syndication date adjustment range in minutes. This range will be used to randomly adjust the publication date for every aggregated post. For example, if you set
-                        the adjustment range as [0..60], the post dates will be increased by random value between 0 and 60 minutes.
+                        the adjustment range as [0..60], the post dates will be increased by a random value between 0 and 60 minutes.
                     </td>
                 </tr>
 
@@ -1286,7 +1283,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Insert post footer into excerpts</td>
                     <td><?php
-                            echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to inserted the post footer into the post excerpt.';
+                            echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to insert the post footer into the post excerpt.';
                             ?>
                     </td>
                 </tr>
