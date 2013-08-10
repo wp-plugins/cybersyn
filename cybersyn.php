@@ -1,14 +1,14 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.12
+  Version: 3.13
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
   Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
 
-$csyn_version_id = '3.12';
+$csyn_version_id = '3.13';
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
@@ -443,7 +443,6 @@ class CyberSyn_Syndicator {
 
             $do_mb_convert_encoding = ($options['convert_encoding'] == 'on' && $this->feed_charset != "not defined" && $this->blog_charset != strtoupper($this->feed_charset));
 
-            $is_flvembed = false;
             $this->xml_parse_error = 0;
             foreach ($rss_lines as $line) {
                 if ($this->count >= $this->max || $this->failure) {
@@ -451,16 +450,6 @@ class CyberSyn_Syndicator {
                 }
                 if ($do_mb_convert_encoding && function_exists("mb_convert_encoding")) {
                     $line = mb_convert_encoding($line, $this->blog_charset, $this->feed_charset);
-                }
-
-                if (mb_strtolower(trim($line)) == '<flv_embed>') {
-                    $is_flvembed = true;
-                } elseif ($is_flvembed) {
-                    if (mb_strtolower(trim($line)) == '</flv_embed>') {
-                        $is_flvembed = false;
-                    } elseif (stripos(trim($line), '<![CDATA[') === false && stripos(trim($line), ']]>') === false) {
-                        $line = '<![CDATA[' . trim($line) . ']]>';
-                    }
                 }
 
                 if (!xml_parse($xml_parser, $line . "\n")) {
@@ -832,7 +821,7 @@ class CyberSyn_Syndicator {
 
             $post['post_title'] = csyn_fix_white_spaces($this->post['post_title']);
             $post['post_name'] = sanitize_title($post['post_title']);
-            $post['guid'] = $wpdb->escape($guid);
+            $post['guid'] = addslashes($guid);
 
             switch ($this->current_feed ['options']['duplicate_check_method']) {
                 case "guid":
@@ -852,10 +841,10 @@ class CyberSyn_Syndicator {
                     $post_date = ((int) $this->post ['post_date']);
                 }
                 $post_date += 60 * ($this->current_feed ['options']['date_min'] + mt_rand(0, $this->current_feed ['options']['date_max'] - $this->current_feed ['options']['date_min']));
-                $post['post_date'] = $wpdb->escape(gmdate('Y-m-d H:i:s', $post_date + 3600 * (int) get_option('gmt_offset')));
-                $post['post_date_gmt'] = $wpdb->escape(gmdate('Y-m-d H:i:s', $post_date));
-                $post['post_modified'] = $wpdb->escape(gmdate('Y-m-d H:i:s', $post_date + 3600 * (int) get_option('gmt_offset')));
-                $post['post_modified_gmt'] = $wpdb->escape(gmdate('Y-m-d H:i:s', $post_date));
+                $post['post_date'] = addslashes(gmdate('Y-m-d H:i:s', $post_date + 3600 * (int) get_option('gmt_offset')));
+                $post['post_date_gmt'] = addslashes(gmdate('Y-m-d H:i:s', $post_date));
+                $post['post_modified'] = addslashes(gmdate('Y-m-d H:i:s', $post_date + 3600 * (int) get_option('gmt_offset')));
+                $post['post_modified_gmt'] = addslashes(gmdate('Y-m-d H:i:s', $post_date));
                 $post['post_status'] = $this->current_feed ['options']['post_status'];
                 $post['comment_status'] = $this->current_feed ['options']['comment_status'];
                 $post['ping_status'] = $this->current_feed ['options']['ping_status'];
@@ -922,9 +911,9 @@ class CyberSyn_Syndicator {
                 if (substr_count($packet, $divider) == 2) {
                     list($title, $content, $excerpt) = explode($divider, $packet);
                 }
-                $post['post_title'] = $wpdb->escape($title);
-                $post['post_content'] = $wpdb->escape(csyn_touch_post_content($content, $attachment, $attachment_status));
-                $post['post_excerpt'] = $wpdb->escape(csyn_touch_post_content($excerpt, $attachment, $attachment_status, $inc_footerss));
+                $post['post_title'] = addslashes($title);
+                $post['post_content'] = addslashes(csyn_touch_post_content($content, $attachment, $attachment_status));
+                $post['post_excerpt'] = addslashes(csyn_touch_post_content($excerpt, $attachment, $attachment_status, $inc_footerss));
 
                 $post_categories = array();
                 if (is_array($this->current_feed ['options']['post_category'])) {
@@ -994,7 +983,7 @@ class CyberSyn_Syndicator {
                     $cat_ids[] = $term['term_id'];
                 }
             } else {
-                $cat_name_escaped = $wpdb->escape($cat_name);
+                $cat_name_escaped = addslashes($cat_name);
                 $results = $wpdb->get_results("SELECT cat_ID FROM $wpdb->categories WHERE (LOWER(cat_name) = LOWER('$cat_name_escaped'))");
 
                 if ($results) {

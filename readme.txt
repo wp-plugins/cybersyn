@@ -5,7 +5,7 @@ Author: CyberSEO
 Author URI: http://www.cyberseo.net/
 Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging, Content Curation, Spinner, TBS, The Best Spinner, YouTube, YouTube Video Parser
 Requires at least: 3.0.0
-Tested up to: 3.5.1
+Tested up to: 3.6
 Stable tag: 4.3
 
 A powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
@@ -52,6 +52,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 3.13 =
+* Fully compatible with WordPress 3.6.
 
 = 3.12 =
 * The default user agent header has been removed from HTTP requests. It was causing problems with FeedBurner feeds.
