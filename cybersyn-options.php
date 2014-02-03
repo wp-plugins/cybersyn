@@ -1,6 +1,6 @@
 <?php
 /*
-  Copyright (c) 2005-2013 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
+  Copyright (c) 2005-2014 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
  */
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
@@ -12,14 +12,14 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
     <!--
     function changeMode() {
         var mode = document.general_settings.<?php echo CSYN_RSS_PULL_MODE; ?>.value;
-        var auto = document.getElementById("auto");	
+        var auto = document.getElementById("auto");
         var cron = document.getElementById("cron");
         if (mode == "auto") {
             auto.style.display = 'block';
-            cron.style.display = 'none';     	
+            cron.style.display = 'none';
         } else {
             auto.style.display = 'none';
-            cron.style.display = 'block';      
+            cron.style.display = 'block';
         }
     }
     //-->
@@ -98,7 +98,7 @@ if (!empty($text)) {
             <tbody>
                 <tr>
                     <td>
-                        <p><strong>CyberSyn version <?php echo $csyn_version_id; ?></strong></p>
+                        <p><strong>CyberSyn</strong></p>
                     </td>
                 </tr>
             </tbody>
@@ -153,7 +153,7 @@ if (!empty($text)) {
                                         echo "checked";
                                     }
                                     ?> /> - when enabled the post titles will be linked to their source pages.</td>
-                            </tr>                                                        
+                            </tr>
 
                             <tr valign="top">
                                 <th align="left">Disable feed duplication control</th>

@@ -1,14 +1,12 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.13
+  Version: 3.20
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
   Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
  */
-
-$csyn_version_id = '3.13';
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
@@ -23,6 +21,7 @@ define('CSYN_CRON_MAGIC', 'cxxx_cron_magic');
 define('CSYN_PSEUDO_CRON_INTERVAL', 'cxxx_pseudo_cron_interval');
 define('CSYN_DISABLE_DUPLICATION_CONTROL', 'cxxx_disable_feed_duplication_control');
 define('CSYN_THEBESTSPINNER_OPTIONS', 'cxxx_thebestspinner_options');
+define('CSYN_WORDAI_OPTIONS', 'cxxx_wordai_options');
 define('CSYN_LINK_TO_SOURCE', 'cxxx_link_to_source');
 
 $csyn_banner = '        <div style="background-color:#FFFFCC; padding:10px 10px 10px 10px; border:1px solid #ddd;">
@@ -249,6 +248,24 @@ function csyn_preset_options() {
             'protectedterms' => '',
         );
         csyn_set_option(CSYN_THEBESTSPINNER_OPTIONS, $options, '', 'yes');
+    }
+
+    if (get_option(CSYN_WORDAI_OPTIONS) === false) {
+        $options = array(
+            'plan' => 'standard',
+            'standard_quality' => '50',
+            'turing_quality' => 'Readable',
+            'email' => '',
+            'pass' => '',
+            'nonested' => '',
+            'sentence' => 'on',
+            'paragraph' => '',
+            'returnspin' => 'true',
+            'nooriginal' => 'on',
+            'protected' => '',
+            'synonyms' => '',
+        );
+        cseo_set_option(CSYN_WORDAI_OPTIONS, $options, '', 'yes');
     }
 }
 
@@ -1104,6 +1121,7 @@ class CyberSyn_Syndicator {
                             <?php
                             echo '<option ' . (($settings["synonymizer_mode"] == "0") ? 'selected ' : '') . 'value="0">Disabled</option>' . "\n";
                             echo '<option ' . (($settings["synonymizer_mode"] == "11") ? 'selected ' : '') . 'value="11">Use The Best Spinner</option>' . "\n";
+                            echo '<option ' . (($settings["synonymizer_mode"] == "14") ? 'selected ' : '') . 'value="14">Use WordAi</option>' . "\n";
                             ?> 
                         </select>
                         <?php echo $hint; ?>
@@ -1138,14 +1156,14 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Create tags from category names</td>
                     <td><?php
-                            echo '<input type="checkbox" name="create_tags" ' . (($settings['create_tags'] == 'on') ? 'checked ' : '') . '>';
+                    echo '<input type="checkbox" name="create_tags" ' . (($settings['create_tags'] == 'on') ? 'checked ' : '') . '>';
                             ?>
                     </td>
                 </tr>
                 <tr>
                     <td>Post tags (separate with commas)</td>
                     <td><?php
-                            echo '<input type="text" name="post_tags" value="' . stripslashes($settings['post_tags']) . '" size="60">';
+                echo '<input type="text" name="post_tags" value="' . stripslashes($settings['post_tags']) . '" size="60">';
                             ?>
                     </td>
                 </tr>
@@ -1161,21 +1179,21 @@ class CyberSyn_Syndicator {
                 </tr>
                 <tr>
                     <td><?php
-                            if ($islocal) {
-                                echo 'Check this feed for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need automatic updates set this parameter to 0.';
-                            } else {
-                                echo 'Check syndicated feeds for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need auto updates, just set this parameter to 0.';
-                            }
-                            if (defined("CSYN_MIN_UPDATE_TIME")) {
-                                echo " <strong>This option is limited by Administrator:<strong> the update period can not be less than " . CSYN_MIN_UPDATE_TIME . " minutes.";
-                            }
+                    if ($islocal) {
+                        echo 'Check this feed for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need automatic updates set this parameter to 0.';
+                    } else {
+                        echo 'Check syndicated feeds for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need auto updates, just set this parameter to 0.';
+                    }
+                    if (defined("CSYN_MIN_UPDATE_TIME")) {
+                        echo " <strong>This option is limited by Administrator:<strong> the update period can not be less than " . CSYN_MIN_UPDATE_TIME . " minutes.";
+                    }
                             ?>
                     </td>
                 </tr>
                 <tr>
                     <td>Maximum number of posts to be syndicated from each feed at once</td>
                     <td><?php
-                            echo '<input type="text" name="max_items" value="' . $settings['max_items'] . '" size="3">' . " - use low values to decrease the syndication time and improve SEO of your blog.";
+                echo '<input type="text" name="max_items" value="' . $settings['max_items'] . '" size="3">' . " - use low values to decrease the syndication time and improve SEO of your blog.";
                             ?>
                     </td>
                 </tr>
@@ -1236,7 +1254,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Convert character encoding</td>
                     <td><?php
-                            echo '<input type="checkbox" name="convert_encoding" ' . (($settings['convert_encoding'] == 'on') ? 'checked ' : '') . '> - enables character encoding conversion.
+                    echo '<input type="checkbox" name="convert_encoding" ' . (($settings['convert_encoding'] == 'on') ? 'checked ' : '') . '> - enables character encoding conversion.
                 This option might be useful when parsing XML/RSS feeds in national charsets different than UTF-8.';
                             ?>
                     </td>
@@ -1245,7 +1263,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Store images locally</td>
                     <td><?php
-                            echo '<input type="checkbox" name="store_images" ' . (($settings['store_images'] == 'on') ? 'checked ' : '') . '> - if enabled, all images from the syndicating feeds will be copied into the default uploads folder of this blog. Make sure that your /wp-content/uploads folder is writable.';
+                echo '<input type="checkbox" name="store_images" ' . (($settings['store_images'] == 'on') ? 'checked ' : '') . '> - if enabled, all images from the syndicating feeds will be copied into the default uploads folder of this blog. Make sure that your /wp-content/uploads folder is writable.';
                             ?>
                     </td>
                 </tr>
@@ -1253,7 +1271,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Post date adjustment range</td>
                     <td><?php
-                            echo '[<input type="text" name="date_min" value="' . $settings['date_min'] . '" size="6"> .. <input type="text" name="date_max" value="' . $settings['date_max'] . '" size="6">]';
+                echo '[<input type="text" name="date_min" value="' . $settings['date_min'] . '" size="6"> .. <input type="text" name="date_max" value="' . $settings['date_max'] . '" size="6">]';
                             ?>
                         - here you can set the syndication date adjustment range in minutes. This range will be used to randomly adjust the publication date for every aggregated post. For example, if you set
                         the adjustment range as [0..60], the post dates will be increased by a random value between 0 and 60 minutes.
@@ -1263,8 +1281,8 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Post footer</td>
                     <td><?php
-                            echo '<input type="text" name="post_footer" value="' . htmlspecialchars(stripslashes($settings['post_footer']), ENT_QUOTES) . '" size="60">';
-                            echo ' - the HTML code wich will be inserted into the bottom of each syndicated post.' . "\n";
+                echo '<input type="text" name="post_footer" value="' . htmlspecialchars(stripslashes($settings['post_footer']), ENT_QUOTES) . '" size="60">';
+                echo ' - the HTML code wich will be inserted into the bottom of each syndicated post.' . "\n";
                             ?>
                     </td>
                 </tr>
@@ -1272,7 +1290,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Insert post footer into excerpts</td>
                     <td><?php
-                            echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to insert the post footer into the post excerpt.';
+                echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to insert the post footer into the post excerpt.';
                             ?>
                     </td>
                 </tr>
@@ -1280,7 +1298,7 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Embed videos</td>
                     <td><?php
-                            echo '<input type="checkbox" name="embed_videos" ' . (($settings['embed_videos'] == 'on') ? 'checked ' : '') . '> - the embeddable videos will be automatically extracted and inserted into the posts. Feed sources supported: YouTube only.';
+                echo '<input type="checkbox" name="embed_videos" ' . (($settings['embed_videos'] == 'on') ? 'checked ' : '') . '> - the embeddable videos will be automatically extracted and inserted into the posts. Feed sources supported: YouTube only.';
                             ?>
                     </td>
                 </tr>                
@@ -1435,6 +1453,34 @@ function csyn_thebestspinner($content) {
     return $content;
 }
 
+function csyn_wordai($content) {
+    global $csyn_wa_options;
+
+    $text = urlencode($content);
+    if ($csyn_wa_options['plan'] == 'turing') {
+        $ch = curl_init('http://wordai.com/users/turing-api.php');
+        $quality = $csyn_wa_options['turing_quality'];
+    } else {
+        $ch = curl_init('http://wordai.com/users/regular-api.php');
+        $quality = $csyn_wa_options['standard_quality'];
+    }
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, "s=$text&quality=$quality&email=" . $csyn_wa_options['email'] . "&pass=" . $csyn_wa_options['pass'] .
+            "&nonested=" . $csyn_wa_options['nonested'] . "&sentence=" . $csyn_wa_options['sentence'] . "&paragraph=" . $csyn_wa_options['returnspin'] .
+            "&returnspin=" . $csyn_wa_options['returnspin'] . "&nooriginal=" . $csyn_wa_options['nooriginal'] .
+            "&protected=" . urlencode($csyn_wa_options['protected']) . "&synonyms=" . urlencode($csyn_wa_options['synonyms']) . "&output=json");
+    $response = trim(curl_exec($ch));
+    curl_close($ch);
+
+    $api_response_interpreted = json_decode($response, true);
+    if ($api_response_interpreted['status'] == 'Success') {
+        return $api_response_interpreted['text'];
+    }
+
+    return $content;
+}
+
 function csyn_spin_content($content) {
     global $csyn_syndicator;
 
@@ -1446,6 +1492,8 @@ function csyn_spin_content($content) {
 
     if ($synonymizer_mode == '11') {
         $content = csyn_thebestspinner($content);
+    } elseif ($synonymizer_mode == '14') {
+        $content = csyn_wordai($content);
     }
 
     return $content;
@@ -1481,6 +1529,7 @@ function csyn_main_menu() {
         add_menu_page('CyberSyn', 'CyberSyn', 'add_users', DIRNAME(__FILE__) . '/cybersyn-options.php');
         add_submenu_page(DIRNAME(__FILE__) . '/cybersyn-options.php', 'CyberSyn RSS/Atom Syndicator', 'RSS/Atom Syndicator', 'add_users', DIRNAME(__FILE__) . '/cybersyn-syndicator.php');
         add_submenu_page(DIRNAME(__FILE__) . '/cybersyn-options.php', 'CyberSyn The Best Spinner Module', 'The Best Spinner', 'add_users', DIRNAME(__FILE__) . '/cybersyn-bs.php');
+        add_submenu_page(DIRNAME(__FILE__) . '/cybersyn-options.php', 'CyberSyn WordAi Module', 'WordAi', 'add_users', DIRNAME(__FILE__) . '/cybersyn-wa.php');
     }
 }
 
@@ -1512,6 +1561,7 @@ if (is_admin()) {
 $csyn_syndicator = new CyberSyn_Syndicator();
 $csyn_rss_pull_mode = get_option(CSYN_RSS_PULL_MODE);
 $csyn_bs_options = get_option(CSYN_THEBESTSPINNER_OPTIONS);
+$csyn_wa_options = get_option(CSYN_WORDAI_OPTIONS);
 
 function csyn_deactivation() {
     wp_clear_scheduled_hook('update_by_wp_cron');

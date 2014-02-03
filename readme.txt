@@ -3,9 +3,9 @@ Contributors: CyberSEO
 Plugin URI: http://www.cyberseo.net/cybersyn/
 Author: CyberSEO
 Author URI: http://www.cyberseo.net/
-Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging, Content Curation, Spinner, TBS, The Best Spinner, YouTube, YouTube Video Parser
+Tags: RSS, Atom, Feed, Feeds, Content, Syndicator, Syndication, Aggregator, Aggregation, Parser, Autoblog, Autoblogging, Content Curation, Spinner, WordAi, TBS, The Best Spinner, YouTube, YouTube Video Parser
 Requires at least: 3.0.0
-Tested up to: 3.6
+Tested up to: 3.8.1
 Stable tag: 4.3
 
 A powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
@@ -17,7 +17,7 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 Features:
 
 1. Parses the RSS and Atom feeds for specific XML elements only and ignores everything else. So it's rather compact and extremely fast.
-2. Integrated with TBS (The Best Spinner).
+2. Integrated with popular TBS (The Best Spinner) and WordAi content spinners.
 3. Allows to automatically embed videos from standard YouTube RSS feeds. Just enable the "Embed videos" option and plugin will automatically extract and embed YouTube videos among with their full descriptions directly into your posts.
 4. Allows to store syndicated images on the local host.
 5. Advanced RSS/Atom parsing algorithm has the ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated at once. This is a very useful feature for SEO of your blogs.
@@ -52,6 +52,10 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 3.20 =
+* Fully compatible with WordPress 3.8.1
+* The plugin is now integrated with WordAi spinner that uses artificial intelligence to understand text and is able to automatically rewrite the syndicated articles with the same readability as a human writer.
 
 = 3.13 =
 * Fully compatible with WordPress 3.6.
