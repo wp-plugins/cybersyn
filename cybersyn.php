@@ -265,7 +265,7 @@ function csyn_preset_options() {
             'protected' => '',
             'synonyms' => '',
         );
-        cseo_set_option(CSYN_WORDAI_OPTIONS, $options, '', 'yes');
+        csyn_set_option(CSYN_WORDAI_OPTIONS, $options, '', 'yes');
     }
 }
 
