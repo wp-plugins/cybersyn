@@ -56,7 +56,7 @@ function csyn_curl_post($url, $data, &$info) {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, csyn_mk_post_data($data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    @curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
     $result = trim(curl_exec($ch));
     $info = curl_getinfo($ch);
     curl_close($ch);
