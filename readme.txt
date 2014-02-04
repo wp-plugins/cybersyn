@@ -8,11 +8,11 @@ Requires at least: 3.0.0
 Tested up to: 3.8.1
 Stable tag: 4.3
 
-A powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
+A powerful, lightweight and easy to use Atom/RSS aggregation and content curation plugin for WordPress.
 
 == Description ==
 
-The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "CyberSEO.net")) is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
+The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "CyberSEO.net")) is powerful, lightweight and easy to use Atom/RSS aggregation and content curation plugin for WordPress.
 
 Features:
 
