@@ -5,7 +5,7 @@
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
-  Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS syndicating plugin for WordPress.
+  Description: CyberSyn is powerful, lightweight and easy to use Atom/RSS aggregation and content curation plugin for WordPress.
  */
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
