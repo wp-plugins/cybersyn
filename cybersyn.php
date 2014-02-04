@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.20
+  Version: 3.21
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -1468,7 +1468,7 @@ function csyn_wordai($content) {
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, "s=$text&quality=$quality&email=" . $csyn_wa_options['email'] . "&pass=" . $csyn_wa_options['pass'] .
             "&nonested=" . $csyn_wa_options['nonested'] . "&sentence=" . $csyn_wa_options['sentence'] . "&paragraph=" . $csyn_wa_options['returnspin'] .
-            "&returnspin=" . $csyn_wa_options['returnspin'] . "&nooriginal=" . $csyn_wa_options['nooriginal'] .
+            "&returnspin=true&nooriginal=" . $csyn_wa_options['nooriginal'] .
             "&protected=" . urlencode($csyn_wa_options['protected']) . "&synonyms=" . urlencode($csyn_wa_options['synonyms']) . "&output=json");
     $response = trim(curl_exec($ch));
     curl_close($ch);

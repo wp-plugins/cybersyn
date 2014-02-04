@@ -85,92 +85,66 @@ if (!empty($text)) {
     }
     ?>
 
+    <img class="alignleft" style="margin:6px;" src="<?php echo plugins_url('/images/settings32.png', __FILE__); ?>" />   
     <h2>General Settings</h2>
 
     <form method="post" action="<?php echo csyn_REQUEST_URI(); ?>" name="general_settings">
 
-        <table class="widefat" style="margin-top: .5em" width="100%">
-            <thead>
-                <tr valign="top">
-                    <th>Version Info</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <p><strong>CyberSyn</strong></p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="widefat" style="margin-top: .5em" width="100%">
-            <thead>
-                <tr valign="top">
-                    <th>Global Settings</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <table class="form-table">
-                            <tr valign="top">
-                                <th align="left">RSS pull mode</th>
-                                <td align="left">
-                                    <select style="width: 160px;" name="<?php echo CSYN_RSS_PULL_MODE; ?>" onchange="changeMode();"<?php
+        <table class="form-table">
+            <tr valign="top">
+                <th align="left">RSS pull mode</th>
+                <td align="left">
+                    <select style="width: 160px;" name="<?php echo CSYN_RSS_PULL_MODE; ?>" onchange="changeMode();"<?php
     if (defined('CSYN_ENABLE_RSS_PULL_MODE') && !CSYN_ENABLE_RSS_PULL_MODE) {
         echo "disabled";
     }
     ?> size="1"><?php
-                                            echo '<option ' . ((get_option(CSYN_RSS_PULL_MODE) == "auto") ? 'selected ' : '') . 'value="auto">auto</option>';
-                                            echo '<option ' . ((get_option(CSYN_RSS_PULL_MODE) == "cron") ? 'selected ' : '') . 'value="cron">by cron job or manually</option>';
+                            echo '<option ' . ((get_option(CSYN_RSS_PULL_MODE) == "auto") ? 'selected ' : '') . 'value="auto">auto</option>';
+                            echo '<option ' . ((get_option(CSYN_RSS_PULL_MODE) == "cron") ? 'selected ' : '') . 'value="cron">by cron job or manually</option>';
     ?></select> - set the RSS pulling mode. If you have no access to a crontab, or not sure on how to set a cron job, set the RSS Pull Mode to "auto".
-                                    <br />
+                    <br />
 
-                                    <p id="auto">
-                                        In this mode, the CyberSyn plugin uses WordPress pseudo cron, which will be executed by the WordPress every <input type="text" name="<?php echo CSYN_PSEUDO_CRON_INTERVAL; ?>" size="1" value="<?php echo get_option(CSYN_PSEUDO_CRON_INTERVAL); ?>"> minutes.
-                                        <br />
-                                        The pseudo cron will trigger when someone visits your WordPress site, if the scheduled time has passed.
-                                    </p>
+                    <p id="auto">
+                        In this mode, the CyberSyn plugin uses WordPress pseudo cron, which will be executed by the WordPress every <input type="text" name="<?php echo CSYN_PSEUDO_CRON_INTERVAL; ?>" size="1" value="<?php echo get_option(CSYN_PSEUDO_CRON_INTERVAL); ?>"> minutes.
+                        <br />
+                        The pseudo cron will trigger when someone visits your WordPress site, if the scheduled time has passed.
+                    </p>
 
-                                    <p id="cron">
-                                        In this mode, you need to manually configure <strong><a href="http://en.wikipedia.org/wiki/Cron" target="_blank">cron</a></strong> at your host. For example, if you want run a cron job once a hour, just add the following line into your crontab:
-                                        <strong><?php echo "0 * * * * /usr/bin/curl --silent " . get_option('siteurl') . "/?pull-feeds=" . get_option(CSYN_CRON_MAGIC); ?></strong>
-                                    </p>
+                    <p id="cron">
+                        In this mode, you need to manually configure <strong><a href="http://en.wikipedia.org/wiki/Cron" target="_blank">cron</a></strong> at your host. For example, if you want run a cron job once a hour, just add the following line into your crontab:
+                        <strong><?php echo "0 * * * * /usr/bin/curl --silent " . get_option('siteurl') . "/?pull-feeds=" . get_option(CSYN_CRON_MAGIC); ?></strong>
+                    </p>
 
-                                    <?php
-                                    if (defined('CSYN_ENABLE_RSS_PULL_MODE') && !CSYN_ENABLE_RSS_PULL_MODE) {
-                                        echo "<strong>This option is blocked by Administrator.</strong>";
-                                    }
-                                    ?>
-                                </td>
-                            </tr>
+                    <?php
+                    if (defined('CSYN_ENABLE_RSS_PULL_MODE') && !CSYN_ENABLE_RSS_PULL_MODE) {
+                        echo "<strong>This option is blocked by Administrator.</strong>";
+                    }
+                    ?>
+                </td>
+            </tr>
 
-                            <tr valign="top">
-                                <th align="left">Link to source</th>
-                                <td align="left"><input type="checkbox" name="<?php echo CSYN_LINK_TO_SOURCE; ?>"
-                                    <?php
-                                    if (get_option(CSYN_LINK_TO_SOURCE) == "on") {
-                                        echo "checked";
-                                    }
-                                    ?> /> - when enabled the post titles will be linked to their source pages.</td>
-                            </tr>
+            <tr valign="top">
+                <th align="left">Link to source</th>
+                <td align="left"><input type="checkbox" name="<?php echo CSYN_LINK_TO_SOURCE; ?>"
+                    <?php
+                    if (get_option(CSYN_LINK_TO_SOURCE) == "on") {
+                        echo "checked";
+                    }
+                    ?> /> - when enabled the post titles will be linked to their source pages.</td>
+            </tr>
 
-                            <tr valign="top">
-                                <th align="left">Disable feed duplication control</th>
-                                <td align="left"><input type="checkbox" name="<?php echo CSYN_DISABLE_DUPLICATION_CONTROL; ?>"
-                                    <?php
-                                    if (get_option(CSYN_DISABLE_DUPLICATION_CONTROL) == "on") {
-                                        echo "checked";
-                                    }
-                                    ?> />
-                                    - allows the CyberSyn plugin to syndicate a same feed more than once.
-                                </td>
-                            </tr>
+            <tr valign="top">
+                <th align="left">Disable feed duplication control</th>
+                <td align="left"><input type="checkbox" name="<?php echo CSYN_DISABLE_DUPLICATION_CONTROL; ?>"
+                    <?php
+                    if (get_option(CSYN_DISABLE_DUPLICATION_CONTROL) == "on") {
+                        echo "checked";
+                    }
+                    ?> />
+                    - allows the CyberSyn plugin to syndicate a same feed more than once.
+                </td>
+            </tr>
 
-                        </table>
-                    </td>
-                </tr>
-            </tbody>
         </table>
 
         <br />

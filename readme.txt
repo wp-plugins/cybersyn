@@ -53,8 +53,10 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
-= 3.20 =
+= 3.21 =
 * Fully compatible with WordPress 3.8.1
+
+= 3.20 =
 * The plugin is now integrated with WordAi spinner that uses artificial intelligence to understand text and is able to automatically rewrite the syndicated articles with the same readability as a human writer.
 
 = 3.13 =

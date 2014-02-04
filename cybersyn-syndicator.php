@@ -1,6 +1,6 @@
 <?php
 /*
-  Copyright (c) 2005-2013 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
+  Copyright (c) 2005-2014 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
  */
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
@@ -40,6 +40,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
 
 <div class="wrap">
 
+    <img class="alignleft" style="margin:6px;" src="<?php echo plugins_url('/images/rss32.png', __FILE__); ?>" />   
     <?php
     if (isset($_POST["alter_default_settings"])) {
         echo('<h2>RSS/Atom Syndicator - Default Settings</h2>');
