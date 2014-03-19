@@ -53,8 +53,11 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 3.22 =
+* WordAi support improved.
+
 = 3.21 =
-* Fixed bug that caused "Fatal error: Call to undefined function"
+* Fixed bug that caused "Fatal error: Call to undefined function".
 * Fully compatible with WordPress 3.8.1
 
 = 3.20 =
