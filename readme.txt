@@ -53,7 +53,7 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
-= 3.22 =
+= 3.23 =
 * WordAi support improved.
 
 = 3.21 =

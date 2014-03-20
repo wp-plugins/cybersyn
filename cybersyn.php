@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.22
+  Version: 3.23
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -1107,24 +1107,13 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Content spinner</td>
                     <td>
-                        <?php
-                        if (strlen($csyn_bs_options['username']) && strlen($csyn_bs_options['password'])) {
-                            $status = '';
-                            $hint = '';
-                        } else {
-                            $status = 'disabled';
-                            $settings["synonymizer_mode"] = 0;
-                            $hint = 'In order to use <a href="http://www.cyberseo.net/partners/thebestspinner.php" target="_blank">The Best Spinner</a>, you must enter your account info first.';
-                        }
-                        ?>
-                        <select name="synonymizer_mode" size="1" <?php echo $status; ?>>    
+                        <select name="synonymizer_mode" size="1">    
                             <?php
                             echo '<option ' . (($settings["synonymizer_mode"] == "0") ? 'selected ' : '') . 'value="0">Disabled</option>' . "\n";
                             echo '<option ' . (($settings["synonymizer_mode"] == "11") ? 'selected ' : '') . 'value="11">Use The Best Spinner</option>' . "\n";
                             echo '<option ' . (($settings["synonymizer_mode"] == "14") ? 'selected ' : '') . 'value="14">Use WordAi</option>' . "\n";
                             ?> 
                         </select>
-                        <?php echo $hint; ?>
                     </td>
                 </tr>
 
