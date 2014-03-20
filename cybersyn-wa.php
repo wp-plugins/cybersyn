@@ -54,7 +54,7 @@ if (!empty($text)) {
                 <tr>
                     <th align="left">Email</th>
                     <td align="left">
-                        <input type="text" name="email" size="40" value="<?php echo $csyn_wa_options['email']; ?>"> - your <a href="http://www.cyberseo.net/partners/wordai.php" target="_blank"><strong>WordAi</strong></a> login email. Used to authenticate.
+                        <input type="text" name="email" size="40" value="<?php echo $csyn_wa_options['email']; ?>"> - your <a href="http://www.cyberseo.net/partners/wordai.php" target="_blank"><strong>WordAi</strong></a> login email.
                     </td>
                 </tr>
 
