@@ -16,8 +16,8 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 
 Features:
 
-1. Parses the RSS and Atom feeds for specific XML elements only and ignores everything else. So it's rather compact and extremely fast.
-2. Integrated with popular TBS (The Best Spinner) and WordAi content spinners.
+1. Parses the [RSS](http://en.wikipedia.org/wiki/RSS "Really Simple Syndication") and [Atom](http://en.wikipedia.org/wiki/Atom_%28standard%29 "Atom") feeds for specific XML elements only and ignores everything else. So it's rather compact and extremely fast.
+2. Integrated with popular [TBS](http://www.cyberseo.net/partners/thebestspinner.php "The Best Spinner") (The Best Spinner) and [WordAi](http://www.cyberseo.net/partners/wordai.php "WordAi") content spinners.
 3. Allows to automatically embed videos from standard YouTube RSS feeds. Just enable the "Embed videos" option and plugin will automatically extract and embed YouTube videos among with their full descriptions directly into your posts.
 4. Allows to store syndicated images on the local host.
 5. Advanced RSS/Atom parsing algorithm has the ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated at once. This is a very useful feature for SEO of your blogs.
