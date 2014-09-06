@@ -4,8 +4,8 @@ Plugin URI: http://www.cyberseo.net/cybersyn/
 Author: CyberSEO
 Author URI: http://www.cyberseo.net/
 Tags: autoblog, autoblogging, content curation, parser, spinner, wordai, the best spinner, tbs, rss, feed
-Requires at least: 3.0.0
-Tested up to: 3.8.1
+Requires at least: 3.0
+Tested up to: 4.0
 Stable tag: 4.3
 
 A powerful, lightweight and easy to use Atom/RSS aggregation and content curation plugin for WordPress.
@@ -52,6 +52,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 3.24 =
+* Fully compatible with WordPress 4.0.
 
 = 3.23 =
 * WordAi support improved.
