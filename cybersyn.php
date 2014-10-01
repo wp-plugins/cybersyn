@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.24
+  Version: 3.25
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -923,11 +923,24 @@ class CyberSyn_Syndicator {
                 $title = $post['post_title'];
                 $content = csyn_fix_white_spaces($post['post_content']);
                 $excerpt = csyn_fix_white_spaces($post['post_excerpt']);
-                $divider = ' 888011000110888 ';
-                $packet = csyn_spin_content($title . $divider . $content . $divider . $excerpt);
-                if (substr_count($packet, $divider) == 2) {
-                    list($title, $content, $excerpt) = explode($divider, $packet);
+                $divider = '(888011000110888)';
+                
+                $packet = $title . $divider . $content;
+                if (strlen(trim($excerpt))) {
+                    $packet .= $divider . $excerpt;
                 }
+
+                $packet = csyn_spin_content($packet);
+
+                if (substr_count($packet, $divider)) {
+                    $spun_post = explode($divider, $packet);
+                    $title = $spun_post[0];
+                    $content = $spun_post[1];
+                    if (isset($spun_post[2])) {
+                        $excerpt = $spun_post[2];
+                    }
+                }                
+                
                 $post['post_title'] = addslashes($title);
                 $post['post_content'] = addslashes(csyn_touch_post_content($content, $attachment, $attachment_status));
                 $post['post_excerpt'] = addslashes(csyn_touch_post_content($excerpt, $attachment, $attachment_status, $inc_footerss));

@@ -53,6 +53,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 3.25 =
+* Fixed issue with WordAi spinner.
+
 = 3.24 =
 * Fully compatible with WordPress 4.0.
 
