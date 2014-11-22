@@ -5,7 +5,7 @@ Author: CyberSEO
 Author URI: http://www.cyberseo.net/
 Tags: autoblog, autoblogging, content curation, parser, spinner, wordai, the best spinner, tbs, rss, feed
 Requires at least: 3.0
-Tested up to: 4.0
+Tested up to: 4.0.1
 Stable tag: 4.3
 
 A powerful, lightweight and easy to use Atom/RSS aggregation and content curation plugin for WordPress.
@@ -52,6 +52,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 3.26 =
+* Fully compatible with WordPress 4.0.1
 
 = 3.25 =
 * Fixed issue with WordAi spinner.
