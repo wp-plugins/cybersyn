@@ -75,7 +75,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         if ((int) $_POST['update_interval'] == 0) {
             $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['interval'] = 0;
         } else {
-            $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['interval'] = max($min_update_time, abs((int) $_POST['update_interval']));
+            $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['interval'] = abs((int) $_POST['update_interval']);
         }
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['post_status'] = $_POST['post_status'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['comment_status'] = $_POST['post_comments'];
@@ -133,7 +133,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         if ((int) $_POST['update_interval'] == 0) {
             $update_interval = 0;
         } else {
-            $update_interval = max($min_update_time, abs((int) $_POST['update_interval']));
+            $update_interval = abs((int) $_POST['update_interval']);
         }
         $feed = array();
         $feed['title'] = trim(stripslashes(htmlspecialchars($_POST['feed_title'], ENT_NOQUOTES)));
@@ -175,7 +175,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         if ($date_min > $date_max) {
             $date_min = $date_max;
         }
-        $csyn_syndicator->global_options ['interval'] = max($min_update_time, abs((int) $_POST['update_interval']));
+        $csyn_syndicator->global_options ['interval'] = abs((int) $_POST['update_interval']);
         $csyn_syndicator->global_options ['post_status'] = $_POST['post_status'];
         $csyn_syndicator->global_options ['comment_status'] = $_POST['post_comments'];
         $csyn_syndicator->global_options ['ping_status'] = $_POST['post_pings'];

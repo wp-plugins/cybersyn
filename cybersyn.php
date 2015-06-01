@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.28
+  Version: 3.29
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -342,24 +342,12 @@ class CyberSyn_Syndicator {
         return $url;
     }
 
-    function extractEmbeddableCode($content) {
-        preg_match('/www\.youtube\.com\/watch\?v=(.+)&/', $content, $matches);
-        if (isset($matches[1])) {
-            $id = $matches[1];
-            $video_page = csyn_file_get_contents('http://www.youtube.com/watch?v=' . $id);
-            preg_match('/<div id="watch-description-text">(.*?)<\/div>/is', $video_page, $matches);
-            if (isset($matches[1])) {
-                return '<p><iframe class="embedded_video" width="560" height="315" src="http://www.youtube.com/embed/' . $id . '" frameborder="0" allowfullscreen></iframe></p>' . $matches[1];
-            }
-        }
-        return $content;
-    }
-
     function resetPost() {
         global $csyn_urls_to_check;
         $this->post ['post_title'] = "";
         $this->post ['post_content'] = "";
         $this->post ['post_excerpt'] = "";
+        $this->post ['media_description'] = "";
         $this->post ['guid'] = "";
         $this->post ['post_date'] = time();
         $this->post ['post_date_gmt'] = time();
@@ -680,6 +668,9 @@ class CyberSyn_Syndicator {
                 case "DESCRIPTION":
                     $this->post ['post_excerpt'] .= $data;
                     break;
+                case "MEDIA:DESCRIPTION":
+                    $this->post ['media_description'] .= $data;
+                    break;
                 case "SUMMARY":
                     $this->post ['post_excerpt'] .= $data;
                     break;
@@ -898,7 +889,13 @@ class CyberSyn_Syndicator {
                 $post['post_excerpt'] = $this->post['post_excerpt'];
 
                 if ($this->current_feed ['options']['embed_videos'] == 'on') {
-                    $post['post_excerpt'] = $post['post_content'] = $this->extractEmbeddableCode($post['post_content']);
+
+                    if (strpos($this->post['guid'], 'yt:video:') !== false) {
+                        list($yt, $video, $id) = explode(':', $this->post['guid']);
+                        $post['post_excerpt'] = $post['post_content'] = '<p><iframe class="embedded_video" width="560" height="315" src="http://www.youtube.com/embed/' . $id .
+                                '" frameborder="0" allowfullscreen></iframe></p>' .
+                                str_replace("\n", '<br />', htmlentities($this->post['media_description'], ENT_QUOTES, 'UTF-8'));
+                    }
                 }
 
                 if ($this->current_feed ['options']['store_images'] == 'on') {
@@ -924,7 +921,7 @@ class CyberSyn_Syndicator {
                 $content = csyn_fix_white_spaces($post['post_content']);
                 $excerpt = csyn_fix_white_spaces($post['post_excerpt']);
                 $divider = '(888011000110888)';
-                
+
                 $packet = $title . $divider . $content;
                 if (strlen(trim($excerpt))) {
                     $packet .= $divider . $excerpt;
@@ -939,8 +936,8 @@ class CyberSyn_Syndicator {
                     if (isset($spun_post[2])) {
                         $excerpt = $spun_post[2];
                     }
-                }                
-                
+                }
+
                 $post['post_title'] = addslashes($title);
                 $post['post_content'] = addslashes(csyn_touch_post_content($content, $attachment, $attachment_status));
                 $post['post_excerpt'] = addslashes(csyn_touch_post_content($excerpt, $attachment, $attachment_status, $inc_footerss));
@@ -1088,21 +1085,21 @@ class CyberSyn_Syndicator {
                     <tr>
                         <td>Feed URL</td>
                         <td><input type="text" name="new_feed_url" size="132" value="<?php echo htmlspecialchars($this->current_feed_url); ?>"<?php
-            if (!$this->edit_existing) {
-                echo ' disabled';
-            }
-                    ?>>
+                            if (!$this->edit_existing) {
+                                echo ' disabled';
+                            }
+                            ?>>
                         </td>
                     </tr>
                 <?php } ?>
                 <tr>
                     <td width="280"><?php
-        if ($islocal) {
-            echo "Syndicate this feed to the following categories";
-        } else {
-            echo "Syndicate new feeds to the following categories";
-        }
-                ?>
+                        if ($islocal) {
+                            echo "Syndicate this feed to the following categories";
+                        } else {
+                            echo "Syndicate new feeds to the following categories";
+                        }
+                        ?>
                     </td>
                     <td>
                         <div id="categorydiv">
@@ -1158,15 +1155,15 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Create tags from category names</td>
                     <td><?php
-                    echo '<input type="checkbox" name="create_tags" ' . (($settings['create_tags'] == 'on') ? 'checked ' : '') . '>';
-                            ?>
+                        echo '<input type="checkbox" name="create_tags" ' . (($settings['create_tags'] == 'on') ? 'checked ' : '') . '>';
+                        ?>
                     </td>
                 </tr>
                 <tr>
                     <td>Post tags (separate with commas)</td>
                     <td><?php
-                echo '<input type="text" name="post_tags" value="' . stripslashes($settings['post_tags']) . '" size="60">';
-                            ?>
+                        echo '<input type="text" name="post_tags" value="' . stripslashes($settings['post_tags']) . '" size="60">';
+                        ?>
                     </td>
                 </tr>
                 <tr>
@@ -1181,22 +1178,22 @@ class CyberSyn_Syndicator {
                 </tr>
                 <tr>
                     <td><?php
-                    if ($islocal) {
-                        echo 'Check this feed for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need automatic updates set this parameter to 0.';
-                    } else {
-                        echo 'Check syndicated feeds for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need auto updates, just set this parameter to 0.';
-                    }
-                    if (defined("CSYN_MIN_UPDATE_TIME")) {
-                        echo " <strong>This option is limited by Administrator:<strong> the update period can not be less than " . CSYN_MIN_UPDATE_TIME . " minutes.";
-                    }
-                            ?>
+                        if ($islocal) {
+                            echo 'Check this feed for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need automatic updates set this parameter to 0.';
+                        } else {
+                            echo 'Check syndicated feeds for updates every</td><td><input type="text" name="update_interval" value="' . $settings['interval'] . '" size="4"> minutes. If you don\'t need auto updates, just set this parameter to 0.';
+                        }
+                        if (defined("CSYN_MIN_UPDATE_TIME")) {
+                            echo " <strong>This option is limited by Administrator:<strong> the update period can not be less than " . CSYN_MIN_UPDATE_TIME . " minutes.";
+                        }
+                        ?>
                     </td>
                 </tr>
                 <tr>
                     <td>Maximum number of posts to be syndicated from each feed at once</td>
                     <td><?php
-                echo '<input type="text" name="max_items" value="' . $settings['max_items'] . '" size="3">' . " - use low values to decrease the syndication time and improve SEO of your blog.";
-                            ?>
+                        echo '<input type="text" name="max_items" value="' . $settings['max_items'] . '" size="3">' . " - use low values to decrease the syndication time and improve SEO of your blog.";
+                        ?>
                     </td>
                 </tr>
                 <tr>
@@ -1256,25 +1253,25 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Convert character encoding</td>
                     <td><?php
-                    echo '<input type="checkbox" name="convert_encoding" ' . (($settings['convert_encoding'] == 'on') ? 'checked ' : '') . '> - enables character encoding conversion.
+                        echo '<input type="checkbox" name="convert_encoding" ' . (($settings['convert_encoding'] == 'on') ? 'checked ' : '') . '> - enables character encoding conversion.
                 This option might be useful when parsing XML/RSS feeds in national charsets different than UTF-8.';
-                            ?>
+                        ?>
                     </td>
                 </tr>
 
                 <tr>
                     <td>Store images locally</td>
                     <td><?php
-                echo '<input type="checkbox" name="store_images" ' . (($settings['store_images'] == 'on') ? 'checked ' : '') . '> - if enabled, all images from the syndicating feeds will be copied into the default uploads folder of this blog. Make sure that your /wp-content/uploads folder is writable.';
-                            ?>
+                        echo '<input type="checkbox" name="store_images" ' . (($settings['store_images'] == 'on') ? 'checked ' : '') . '> - if enabled, all images from the syndicating feeds will be copied into the default uploads folder of this blog. Make sure that your /wp-content/uploads folder is writable.';
+                        ?>
                     </td>
                 </tr>
 
                 <tr>
                     <td>Post date adjustment range</td>
                     <td><?php
-                echo '[<input type="text" name="date_min" value="' . $settings['date_min'] . '" size="6"> .. <input type="text" name="date_max" value="' . $settings['date_max'] . '" size="6">]';
-                            ?>
+                        echo '[<input type="text" name="date_min" value="' . $settings['date_min'] . '" size="6"> .. <input type="text" name="date_max" value="' . $settings['date_max'] . '" size="6">]';
+                        ?>
                         - here you can set the syndication date adjustment range in minutes. This range will be used to randomly adjust the publication date for every aggregated post. For example, if you set
                         the adjustment range as [0..60], the post dates will be increased by a random value between 0 and 60 minutes.
                     </td>
@@ -1283,25 +1280,25 @@ class CyberSyn_Syndicator {
                 <tr>
                     <td>Post footer</td>
                     <td><?php
-                echo '<input type="text" name="post_footer" value="' . htmlspecialchars(stripslashes($settings['post_footer']), ENT_QUOTES) . '" size="60">';
-                echo ' - the HTML code wich will be inserted into the bottom of each syndicated post.' . "\n";
-                            ?>
+                        echo '<input type="text" name="post_footer" value="' . htmlspecialchars(stripslashes($settings['post_footer']), ENT_QUOTES) . '" size="60">';
+                        echo ' - the HTML code wich will be inserted into the bottom of each syndicated post.' . "\n";
+                        ?>
                     </td>
                 </tr>
 
                 <tr>
                     <td>Insert post footer into excerpts</td>
                     <td><?php
-                echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to insert the post footer into the post excerpt.';
-                            ?>
+                        echo '<input type="checkbox" name="include_post_footers" ' . (($settings['include_post_footers'] == 'on') ? 'checked ' : '') . '> - enable this option if you want to insert the post footer into the post excerpt.';
+                        ?>
                     </td>
                 </tr>
 
                 <tr>
                     <td>Embed videos</td>
                     <td><?php
-                echo '<input type="checkbox" name="embed_videos" ' . (($settings['embed_videos'] == 'on') ? 'checked ' : '') . '> - the embeddable videos will be automatically extracted and inserted into the posts. Feed sources supported: YouTube only.';
-                            ?>
+                        echo '<input type="checkbox" name="embed_videos" ' . (($settings['embed_videos'] == 'on') ? 'checked ' : '') . '> - the embeddable videos will be automatically extracted and inserted into the posts. Feed sources supported: YouTube only.';
+                        ?>
                     </td>
                 </tr>                
 
