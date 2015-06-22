@@ -3,7 +3,7 @@ Contributors: CyberSEO
 Plugin URI: http://www.cyberseo.net/cybersyn/
 Author: CyberSEO
 Author URI: http://www.cyberseo.net/
-Tags: autoblog, autoblogging, content curation, parser, spinner, wordai, the best spinner, tbs, rss, feed
+Tags: autoblog, autoblogging, content curation, parser, rss, feed
 Requires at least: 3.0
 Tested up to: 4.2.2
 Stable tag: 4.3
@@ -17,12 +17,11 @@ The CyberSyn plugin (developed by [CyberSEO.net](http://www.cyberseo.net/ "Cyber
 Features:
 
 1. Parses the [RSS](http://en.wikipedia.org/wiki/RSS "Really Simple Syndication") and [Atom](http://en.wikipedia.org/wiki/Atom_%28standard%29 "Atom") feeds for specific XML elements only and ignores everything else. So it's rather compact and extremely fast.
-2. Integrated with popular [TBS](http://www.cyberseo.net/partners/thebestspinner.php "The Best Spinner") (The Best Spinner) and [WordAi](http://www.cyberseo.net/partners/wordai.php "WordAi") content spinners.
-3. Allows to automatically embed videos from standard YouTube RSS feeds. Just enable the "Embed videos" option and plugin will automatically extract and embed YouTube videos among with their full descriptions directly into your posts.
-4. Allows to store syndicated images on the local host.
-5. Advanced RSS/Atom parsing algorithm has the ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated at once. This is a very useful feature for SEO of your blogs.
-6. Adjustable post uniqueness identification by GUID, post name or both.
-7. The plugin has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
+2. Allows to automatically embed videos from standard YouTube RSS feeds. Just enable the "Embed videos" option and plugin will automatically extract and embed YouTube videos among with their full descriptions directly into your posts.
+3. Allows to store syndicated images on the local host.
+4. Advanced RSS/Atom parsing algorithm has the ability to pull the feeds fully automatically. Furthermore, you can assign the updating period to each particular feed. Also you can set up a maximum number of posts that will be syndicated at once. This is a very useful feature for SEO of your blogs.
+5. Adjustable post uniqueness identification by GUID, post name or both.
+6. The plugin has no problem with syndicating various embedded media content such as streaming videos, flash objects etc.
 
 Requirements:
 
@@ -52,6 +51,10 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 1. Syndicating a new RSS feed.
 
 == Changelog ==
+
+= 4.00 =
+* Fixed CSRF vulnerability.
+* The content spinning feature has been removed by request of WordPress.org.
 
 = 3.29 =
 * Fully compatible with WordPress 4.2.2

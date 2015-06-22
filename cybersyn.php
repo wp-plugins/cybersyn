@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 3.29
+  Version: 4.00
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -20,8 +20,6 @@ define('CSYN_RSS_PULL_MODE', 'cxxx_rss_pull_mode');
 define('CSYN_CRON_MAGIC', 'cxxx_cron_magic');
 define('CSYN_PSEUDO_CRON_INTERVAL', 'cxxx_pseudo_cron_interval');
 define('CSYN_DISABLE_DUPLICATION_CONTROL', 'cxxx_disable_feed_duplication_control');
-define('CSYN_THEBESTSPINNER_OPTIONS', 'cxxx_thebestspinner_options');
-define('CSYN_WORDAI_OPTIONS', 'cxxx_wordai_options');
 define('CSYN_LINK_TO_SOURCE', 'cxxx_link_to_source');
 
 $csyn_banner = '        <div style="background-color:#FFFFCC; padding:10px 10px 10px 10px; border:1px solid #ddd;">
@@ -239,33 +237,6 @@ function csyn_preset_options() {
 
     if (get_option(CSYN_LINK_TO_SOURCE) === false) {
         csyn_set_option(CSYN_LINK_TO_SOURCE, 'auto', '', 'yes');
-    }
-
-    if (get_option(CSYN_THEBESTSPINNER_OPTIONS) === false) {
-        $options = array(
-            'username' => '',
-            'password' => '',
-            'protectedterms' => '',
-        );
-        csyn_set_option(CSYN_THEBESTSPINNER_OPTIONS, $options, '', 'yes');
-    }
-
-    if (get_option(CSYN_WORDAI_OPTIONS) === false) {
-        $options = array(
-            'plan' => 'standard',
-            'standard_quality' => '50',
-            'turing_quality' => 'Readable',
-            'email' => '',
-            'pass' => '',
-            'nonested' => '',
-            'sentence' => 'on',
-            'paragraph' => '',
-            'returnspin' => 'true',
-            'nooriginal' => 'on',
-            'protected' => '',
-            'synonyms' => '',
-        );
-        csyn_set_option(CSYN_WORDAI_OPTIONS, $options, '', 'yes');
     }
 }
 
@@ -920,23 +891,6 @@ class CyberSyn_Syndicator {
                 $title = $post['post_title'];
                 $content = csyn_fix_white_spaces($post['post_content']);
                 $excerpt = csyn_fix_white_spaces($post['post_excerpt']);
-                $divider = '(888011000110888)';
-
-                $packet = $title . $divider . $content;
-                if (strlen(trim($excerpt))) {
-                    $packet .= $divider . $excerpt;
-                }
-
-                $packet = csyn_spin_content($packet);
-
-                if (substr_count($packet, $divider)) {
-                    $spun_post = explode($divider, $packet);
-                    $title = $spun_post[0];
-                    $content = $spun_post[1];
-                    if (isset($spun_post[2])) {
-                        $excerpt = $spun_post[2];
-                    }
-                }
 
                 $post['post_title'] = addslashes($title);
                 $post['post_content'] = addslashes(csyn_touch_post_content($content, $attachment, $attachment_status));
@@ -1056,7 +1010,7 @@ class CyberSyn_Syndicator {
     }
 
     function showSettings($islocal, $settings) {
-        global $wp_version, $wpdb, $csyn_bs_options;
+        global $wp_version, $wpdb;
         if (version_compare($wp_version, '2.5', '<')) {
             echo "<hr>\n";
         }
@@ -1111,19 +1065,6 @@ class CyberSyn_Syndicator {
                                 </ul>
                             </div>
                         </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Content spinner</td>
-                    <td>
-                        <select name="synonymizer_mode" size="1">    
-                            <?php
-                            echo '<option ' . (($settings["synonymizer_mode"] == "0") ? 'selected ' : '') . 'value="0">Disabled</option>' . "\n";
-                            echo '<option ' . (($settings["synonymizer_mode"] == "11") ? 'selected ' : '') . 'value="11">Use The Best Spinner</option>' . "\n";
-                            echo '<option ' . (($settings["synonymizer_mode"] == "14") ? 'selected ' : '') . 'value="14">Use WordAi</option>' . "\n";
-                            ?> 
-                        </select>
                     </td>
                 </tr>
 
@@ -1304,6 +1245,7 @@ class CyberSyn_Syndicator {
 
             </tbody>
         </table>
+        <input type="hidden" name="csyn_token" value="<?php echo get_option('CSYN_TOKEN'); ?>" />
         <?php
         echo '<div class="submit">' . "\n";
         if ($islocal) {
@@ -1409,6 +1351,10 @@ class CyberSyn_Syndicator {
                     </td>
                 </tr>
             </table>
+            <?php
+            update_option('CSYN_TOKEN', rand());
+            ?>
+            <input type="hidden" name="csyn_token" value="<?php echo get_option('CSYN_TOKEN'); ?>" />
         </form>
         </div>
         <?php
@@ -1425,77 +1371,6 @@ function csyn_set_option($option_name, $newvalue, $deprecated, $autoload) {
     } else {
         update_option($option_name, $newvalue);
     }
-}
-
-function csyn_thebestspinner($content) {
-    global $csyn_bs_options;
-
-    if (strlen($csyn_bs_options['username']) && strlen($csyn_bs_options['password'])) {
-        $url = 'http://thebestspinner.com/api.php';
-        $data = array();
-        $data['action'] = 'authenticate';
-        $data['format'] = 'php';
-        $data['username'] = $csyn_bs_options['username'];
-        $data['password'] = $csyn_bs_options['password'];
-        $result = unserialize(csyn_curl_post($url, $data, $info));
-        if (isset($result['success']) && $result['success'] == 'true') {
-            $data['session'] = $result['session'];
-            $data['action'] = 'rewriteText';
-            $data['protectedterms'] = $csyn_bs_options['protectedterms'];
-            $data['text'] = $content;
-            $result = unserialize(csyn_curl_post($url, $data, $info));
-            if ($result['success'] == 'true') {
-                return $result['output'];
-            }
-        }
-    }
-    return $content;
-}
-
-function csyn_wordai($content) {
-    global $csyn_wa_options;
-
-    $text = urlencode($content);
-    if ($csyn_wa_options['plan'] == 'turing') {
-        $ch = curl_init('http://wordai.com/users/turing-api.php');
-        $quality = $csyn_wa_options['turing_quality'];
-    } else {
-        $ch = curl_init('http://wordai.com/users/regular-api.php');
-        $quality = $csyn_wa_options['standard_quality'];
-    }
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, "s=$text&quality=$quality&email=" . $csyn_wa_options['email'] . "&pass=" . $csyn_wa_options['pass'] .
-            "&nonested=" . $csyn_wa_options['nonested'] . "&sentence=" . $csyn_wa_options['sentence'] . "&paragraph=" . $csyn_wa_options['returnspin'] .
-            "&returnspin=true&nooriginal=" . $csyn_wa_options['nooriginal'] .
-            "&protected=" . urlencode($csyn_wa_options['protected']) . "&synonyms=" . urlencode($csyn_wa_options['synonyms']) . "&output=json");
-    $response = trim(curl_exec($ch));
-    curl_close($ch);
-
-    $api_response_interpreted = json_decode($response, true);
-    if ($api_response_interpreted['status'] == 'Success') {
-        return $api_response_interpreted['text'];
-    }
-
-    return $content;
-}
-
-function csyn_spin_content($content) {
-    global $csyn_syndicator;
-
-    if (count($csyn_syndicator->current_feed)) {
-        $synonymizer_mode = $csyn_syndicator->current_feed ['options']['synonymizer_mode'];
-    } else {
-        $synonymizer_mode = $csyn_syndicator->global_options ['synonymizer_mode'];
-    }
-
-    if ($synonymizer_mode == '11') {
-        $content = csyn_thebestspinner($content);
-    } elseif ($synonymizer_mode == '14') {
-        $content = csyn_wordai($content);
-    }
-
-    return $content;
 }
 
 function csyn_parse_special_words($content) {
@@ -1527,8 +1402,6 @@ function csyn_main_menu() {
     if (function_exists('add_menu_page')) {
         add_menu_page('CyberSyn', 'CyberSyn', 'add_users', DIRNAME(__FILE__) . '/cybersyn-options.php');
         add_submenu_page(DIRNAME(__FILE__) . '/cybersyn-options.php', 'CyberSyn RSS/Atom Syndicator', 'RSS/Atom Syndicator', 'add_users', DIRNAME(__FILE__) . '/cybersyn-syndicator.php');
-        add_submenu_page(DIRNAME(__FILE__) . '/cybersyn-options.php', 'CyberSyn The Best Spinner Module', 'The Best Spinner', 'add_users', DIRNAME(__FILE__) . '/cybersyn-bs.php');
-        add_submenu_page(DIRNAME(__FILE__) . '/cybersyn-options.php', 'CyberSyn WordAi Module', 'WordAi', 'add_users', DIRNAME(__FILE__) . '/cybersyn-wa.php');
     }
 }
 
@@ -1559,8 +1432,6 @@ if (is_admin()) {
 }
 $csyn_syndicator = new CyberSyn_Syndicator();
 $csyn_rss_pull_mode = get_option(CSYN_RSS_PULL_MODE);
-$csyn_bs_options = get_option(CSYN_THEBESTSPINNER_OPTIONS);
-$csyn_wa_options = get_option(CSYN_WORDAI_OPTIONS);
 
 function csyn_deactivation() {
     wp_clear_scheduled_hook('update_by_wp_cron');

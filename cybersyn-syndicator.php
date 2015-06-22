@@ -1,11 +1,18 @@
 <?php
 /*
-  Copyright (c) 2005-2014 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
+  Copyright (c) 2005-2015 by CyberSEO (http://www.cyberseo.net). All Rights Reserved.
  */
 
 if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
 }
+
+if (isset($_POST["update_feed_settings"]) || isset($_POST["check_for_updates"]) || isset($_POST["delete_feeds"]) || isset($_POST["delete_posts"]) || isset($_POST["feed_ids"]) || isset($_POST["new_feed"]) || isset($_POST["syndicate_feed"]) || isset($_POST["update_default_settings"]) || isset($_POST["alter_default_settings"])) {
+if (!isset($_POST['csyn_token']) || ($_POST['csyn_token'] != get_option('CSYN_TOKEN'))) {
+        die();
+    }
+}
+update_option('CSYN_TOKEN', rand());
 ?>
 
 <style type="text/css">
@@ -27,8 +34,8 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
     <!--
     function checkAll(form) {
         for (i = 0, n = form.elements.length; i < n; i++) {
-            if(form.elements[i].type == "checkbox" && !(form.elements[i].getAttribute('onclick',2))) {
-                if(form.elements[i].checked == true)
+            if (form.elements[i].type == "checkbox" && !(form.elements[i].getAttribute('onclick', 2))) {
+                if (form.elements[i].checked == true)
                     form.elements[i].checked = false;
                 else
                     form.elements[i].checked = true;
@@ -86,7 +93,6 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['post_category'] = @$_POST['post_category'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['duplicate_check_method'] = $_POST['duplicate_check_method'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['undefined_category'] = $_POST['undefined_category'];
-        $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['synonymizer_mode'] = $_POST['synonymizer_mode'];
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['date_min'] = $date_min;
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['date_max'] = $date_max;
         $csyn_syndicator->feeds [(int) $_POST["feed_id"]]['options']['insert_media_attachments'] = $_POST['insert_media_attachments'];
@@ -148,7 +154,6 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         $feed['options']['base_date'] = $_POST['post_publish_date'];
         $feed['options']['duplicate_check_method'] = $_POST['duplicate_check_method'];
         $feed['options']['undefined_category'] = $_POST['undefined_category'];
-        $feed['options']['synonymizer_mode'] = $_POST['synonymizer_mode'];
         $feed['options']['post_tags'] = $_POST['post_tags'];
         $feed['options']['date_min'] = $date_min;
         $feed['options']['date_max'] = $date_max;
@@ -185,7 +190,6 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
         $csyn_syndicator->global_options ['post_category'] = @$_POST['post_category'];
         $csyn_syndicator->global_options ['duplicate_check_method'] = $_POST['duplicate_check_method'];
         $csyn_syndicator->global_options ['undefined_category'] = $_POST['undefined_category'];
-        $csyn_syndicator->global_options ['synonymizer_mode'] = $_POST['synonymizer_mode'];
         $csyn_syndicator->global_options ['date_min'] = $date_min;
         $csyn_syndicator->global_options ['date_max'] = $date_max;
         $csyn_syndicator->global_options ['insert_media_attachments'] = $_POST['insert_media_attachments'];
