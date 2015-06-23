@@ -52,6 +52,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 4.01 =
+* Fixed issue with adding of new feeds.
+
 = 4.00 =
 * Fixed CSRF vulnerability.
 * The content spinning feature has been removed by request of WordPress.org.

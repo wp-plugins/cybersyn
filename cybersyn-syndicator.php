@@ -7,7 +7,7 @@ if (!function_exists("get_option") || !function_exists("add_filter")) {
     die();
 }
 
-if (isset($_POST["update_feed_settings"]) || isset($_POST["check_for_updates"]) || isset($_POST["delete_feeds"]) || isset($_POST["delete_posts"]) || isset($_POST["feed_ids"]) || isset($_POST["new_feed"]) || isset($_POST["syndicate_feed"]) || isset($_POST["update_default_settings"]) || isset($_POST["alter_default_settings"])) {
+if (isset($_POST["update_feed_settings"]) || isset($_POST["check_for_updates"]) || isset($_POST["delete_feeds"]) || isset($_POST["delete_posts"]) || isset($_POST["feed_ids"]) || isset($_POST["syndicate_feed"]) || isset($_POST["update_default_settings"]) || isset($_POST["alter_default_settings"])) {
 if (!isset($_POST['csyn_token']) || ($_POST['csyn_token'] != get_option('CSYN_TOKEN'))) {
         die();
     }

@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 4.00
+  Version: 4.01
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
