@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: CyberSyn
-  Version: 4.01
+  Version: 4.02
   Author: CyberSEO.net
   Author URI: http://www.cyberseo.net/
   Plugin URI: http://www.cyberseo.net/cybersyn/
@@ -591,7 +591,7 @@ class CyberSyn_Syndicator {
             $this->post ['enclosure_url'] = $attribs['URL'];
         }
 
-        if ($name == "LINK" && isset($attribs['HREF']) && isset($attribs ["REL"])) {
+        if ($this->insideitem && $name == "LINK" && isset($attribs['HREF']) && isset($attribs ["REL"])) {
             if (stripos($attribs ["REL"], "enclosure") !== false) {
                 $this->post['enclosure_url'] = $attribs['HREF'];
             } elseif (stripos($attribs ["REL"], "alternate") !== false && $this->post['link'] == '') {

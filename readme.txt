@@ -52,6 +52,9 @@ The support forums can be found at http://www.cyberseo.net/forum/.
 
 == Changelog ==
 
+= 4.02 =
+* Fixed the ["cyberseo_post_link custom field not good for first post"](https://wordpress.org/support/topic/cyberseo_post_link-custom-field-not-good-for-first-post "cyberseo_post_link custom field not good for first post") bug. Thanks to marcetin.
+
 = 4.01 =
 * Fixed issue with adding of new feeds.
 
